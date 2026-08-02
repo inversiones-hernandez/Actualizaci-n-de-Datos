@@ -1,0 +1,17 @@
+{
+  "name": "Inversiones Hernández — Actualización de Datos",
+  "short_name": "Actualizar Datos",
+  "description": "Actualiza tu información personal, de contacto, laboral y tus documentos para tu expediente en Préstamos Cloud.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f6fb",
+  "theme_color": "#0066ff",
+  "icons": [
+    {
+      "src": "assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
