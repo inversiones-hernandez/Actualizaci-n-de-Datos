@@ -6,14 +6,13 @@
    1. Configuración y estado
    2. Utilidades (DOM, toast)
    3. Validadores
-   4. Persistencia (localStorage — solo texto, nunca imágenes)
+   4. Persistencia (localStorage)
    5. Navegación entre pasos
-   6. Manejo de archivos (dropzone, cámara, preview)
-   7. Resumen de confirmación
-   8. Construcción del mensaje de WhatsApp
-   9. Envío del formulario
-   10. Overlays (loader, éxito, aviso, modal de imagen)
-   11. Inicialización
+   6. Resumen de confirmación
+   7. Construcción del mensaje de WhatsApp
+   8. Envío del formulario
+   9. Overlays (loader, éxito, aviso, modal de imagen de ejemplo)
+   10. Inicialización
    ========================================================================== */
 
 (() => {
@@ -23,12 +22,8 @@
   const WHATSAPP_NUMBER = '18495942190';
   const TOTAL_STEPS = 5;
   const STORAGE_KEY = 'ih-actualizacion-datos';
-  // Campos de archivo: NUNCA se guardan en localStorage (demasiado sensibles/pesados).
-  const FILE_FIELDS = ['fotoPerfil', 'fotoCedulaFrontal', 'fotoCedulaReverso'];
-  const MAX_FILE_SIZE_MB = 8;
 
   let currentStep = 1;
-  const uploadedFiles = {}; // { fieldName: File }
 
   /* ===== 2. UTILIDADES ===== */
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -108,19 +103,8 @@
     let allValid = true;
 
     $$('input[required], select[required]', stepEl).forEach((input) => {
-      if (input.type === 'file') return; // se valida aparte
       if (!validateField(input)) allValid = false;
     });
-
-    // Validación de archivos requeridos (paso 4)
-    if (stepNumber === 4) {
-      FILE_FIELDS.forEach((name) => {
-        const uploadBlock = $(`#${name}`).closest('.upload-block');
-        const ok = !!uploadedFiles[name];
-        uploadBlock.classList.toggle('invalid', !ok);
-        if (!ok) allValid = false;
-      });
-    }
 
     // Checkbox de consentimiento (paso 5)
     if (stepNumber === 5) {
@@ -139,8 +123,6 @@
     try {
       const data = {};
       $$('input, select', form).forEach((el) => {
-        if (el.type === 'file') return;
-        if (FILE_FIELDS.includes(el.name)) return;
         if (el.type === 'checkbox') { data[el.name] = el.checked; return; }
         data[el.name] = el.value;
       });
@@ -200,78 +182,7 @@
     goToStep(currentStep - 1);
   }
 
-  /* ===== 6. MANEJO DE ARCHIVOS ===== */
-  function validateImageFile(file) {
-    if (!file.type.startsWith('image/')) {
-      showToast('El archivo debe ser una imagen.', true);
-      return false;
-    }
-    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-      showToast(`La imagen no debe superar ${MAX_FILE_SIZE_MB}MB.`, true);
-      return false;
-    }
-    return true;
-  }
-
-  function handleFileSelected(fieldName, file) {
-    if (!file || !validateImageFile(file)) return;
-    uploadedFiles[fieldName] = file;
-
-    const previewBox = $(`#preview${fieldName.charAt(0).toUpperCase()}${fieldName.slice(1)}`);
-    const img = previewBox.querySelector('img');
-    const reader = new FileReader();
-    reader.onload = (e) => { img.src = e.target.result; };
-    reader.readAsDataURL(file);
-
-    previewBox.hidden = false;
-    const dropzone = $(`.dropzone[data-target="${fieldName}"]`);
-    dropzone.style.display = 'none';
-
-    const uploadBlock = dropzone.closest('.upload-block');
-    uploadBlock.classList.remove('invalid');
-  }
-
-  function removeFile(fieldName) {
-    delete uploadedFiles[fieldName];
-    const input = $(`#${fieldName}`);
-    input.value = '';
-    const previewBox = $(`#preview${fieldName.charAt(0).toUpperCase()}${fieldName.slice(1)}`);
-    previewBox.hidden = true;
-    $(`.dropzone[data-target="${fieldName}"]`).style.display = '';
-  }
-
-  function initDropzones() {
-    $$('.dropzone').forEach((zone) => {
-      const fieldName = zone.dataset.target;
-      const input = $(`#${fieldName}`);
-
-      zone.addEventListener('click', () => input.click());
-      zone.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
-      });
-
-      input.addEventListener('change', () => {
-        if (input.files && input.files[0]) handleFileSelected(fieldName, input.files[0]);
-      });
-
-      ['dragenter', 'dragover'].forEach((evt) => {
-        zone.addEventListener(evt, (e) => { e.preventDefault(); zone.classList.add('dragover'); });
-      });
-      ['dragleave', 'drop'].forEach((evt) => {
-        zone.addEventListener(evt, (e) => { e.preventDefault(); zone.classList.remove('dragover'); });
-      });
-      zone.addEventListener('drop', (e) => {
-        const file = e.dataTransfer.files && e.dataTransfer.files[0];
-        if (file) handleFileSelected(fieldName, file);
-      });
-    });
-
-    $$('.preview-remove').forEach((btn) => {
-      btn.addEventListener('click', () => removeFile(btn.dataset.target));
-    });
-  }
-
-  /* ===== 7. RESUMEN DE CONFIRMACIÓN ===== */
+  /* ===== 6. RESUMEN DE CONFIRMACIÓN ===== */
   function renderSummary() {
     const data = new FormData(form);
     const rows = [
@@ -281,8 +192,7 @@
       ['Correo', data.get('correo')],
       ['Dirección', `${data.get('direccion')}, ${data.get('sector')}, ${data.get('municipio')}, ${data.get('provincia')}`],
       ['Ocupación', data.get('ocupacion')],
-      ['Situación laboral', data.get('situacionLaboral')],
-      ['Documentos adjuntos', `${Object.keys(uploadedFiles).length} / 3`]
+      ['Situación laboral', data.get('situacionLaboral')]
     ];
     $('#summaryBox').innerHTML = rows
       .map(([label, value]) => `<div><strong>${label}:</strong> ${escapeHtml(String(value || '—'))}</div>`)
@@ -295,7 +205,7 @@
     return div.innerHTML;
   }
 
-  /* ===== 8. MENSAJE DE WHATSAPP ===== */
+  /* ===== 7. MENSAJE DE WHATSAPP ===== */
   function buildWhatsappMessage() {
     const d = new FormData(form);
     const g = (name) => d.get(name) || '—';
@@ -336,10 +246,10 @@
       `Ingresos: RD$ ${g('ingresos')}`,
       `Situación laboral: ${g('situacionLaboral')}`,
       linea,
-      '📸 DOCUMENTOS',
-      'Foto de perfil: Adjuntar manualmente.',
-      'Foto cédula frontal: Adjuntar manualmente.',
-      'Foto cédula reverso: Adjuntar manualmente.',
+      '📸 DOCUMENTOS (enviar como fotos adjuntas en este chat)',
+      '1. Foto de perfil, sosteniendo el documento de identidad.',
+      '2. Foto del documento de identidad (frontal).',
+      '3. Foto del documento de identidad (reverso).',
       linea,
       `Fecha de envío: ${fecha}`,
       `Hora: ${hora}`,
@@ -348,7 +258,7 @@
     ].join('\n');
   }
 
-  /* ===== 9. ENVÍO DEL FORMULARIO ===== */
+  /* ===== 8. ENVÍO DEL FORMULARIO ===== */
   function handleSubmit(e) {
     e.preventDefault();
     if (!validateStep(5)) return;
@@ -387,25 +297,15 @@
   function resetFormCompletely() {
     form.reset();
 
-    // Limpiar archivos y previsualizaciones
-    FILE_FIELDS.forEach((name) => {
-      delete uploadedFiles[name];
-      const previewBox = $(`#preview${name.charAt(0).toUpperCase()}${name.slice(1)}`);
-      previewBox.hidden = true;
-      previewBox.querySelector('img').src = '';
-      $(`.dropzone[data-target="${name}"]`).style.display = '';
-    });
-
     // Limpiar estados de validación visual
     $$('.field.invalid', form).forEach((el) => el.classList.remove('invalid'));
-    $$('.upload-block.invalid', form).forEach((el) => el.classList.remove('invalid'));
     $('#consentError').style.display = 'none';
 
     clearStorage();
     goToStep(1);
   }
 
-  /* ===== 10. OVERLAYS ===== */
+  /* ===== 9. OVERLAYS ===== */
   function showLoader() { $('#loaderBarFill').style.width = '0%'; $('#loaderOverlay').hidden = false; }
   function hideLoader() { $('#loaderOverlay').hidden = true; }
   function showSuccess() { $('#successOverlay').hidden = false; }
@@ -415,10 +315,10 @@
   function showImageModal() { $('#imageModal').hidden = false; }
   function hideImageModal() { $('#imageModal').hidden = true; }
 
-  /* ===== 11. INICIALIZACIÓN ===== */
+  /* ===== 10. INICIALIZACIÓN ===== */
   function bindLiveValidation() {
     $$('input, select', form).forEach((el) => {
-      if (el.type === 'file' || el.type === 'checkbox') return;
+      if (el.type === 'checkbox') return;
       el.addEventListener('blur', () => validateField(el));
       el.addEventListener('input', () => {
         if (el.closest('.field.invalid')) validateField(el);
@@ -428,7 +328,6 @@
 
   function init() {
     restoreFromStorage();
-    initDropzones();
     bindLiveValidation();
 
     $('#startBtn').addEventListener('click', () => {
@@ -440,6 +339,8 @@
     form.addEventListener('submit', handleSubmit);
 
     $('#viewExampleBtn').addEventListener('click', showImageModal);
+    const exPhoto = $('.example-photo');
+    if (exPhoto) exPhoto.addEventListener('click', showImageModal);
     $('#closeImageModal').addEventListener('click', hideImageModal);
     $('#closeWhatsappNotice').addEventListener('click', hideWhatsappNotice);
 
