@@ -9,7 +9,7 @@
    5. Hero
    6. Barra de progreso
    7. Formulario (tarjeta, campos, validación)
-   8. Carga de documentos (dropzones, preview, ejemplo)
+   8. Documentos (paso explicativo, sin carga de archivos)
    9. Botones
    10. Overlays (loader, éxito, aviso, modal imagen)
    11. Toast
@@ -205,49 +205,43 @@ fieldset{ border:none; margin:0; padding:0; }
 }
 .summary-box strong{ color:var(--texto); }
 
-/* ===== 8. CARGA DE DOCUMENTOS ===== */
-.example-card{
-  display:flex; gap:24px; align-items:center;
-  background:var(--gris-bg); border:1.5px solid var(--azul-electrico);
-  border-radius:18px; padding:22px; margin-bottom:32px;
-}
-.example-visual{ flex-shrink:0; width:120px; height:120px; }
-.example-illustration{ width:100%; height:100%; }
-.example-illustration-lg{ width:min(70vw,320px); height:min(70vw,320px); margin:0 auto; }
-.example-copy h3{ font-size:16px; margin-bottom:10px; }
-.example-copy ul{ display:grid; gap:6px; margin-bottom:14px; }
-.example-copy li{ font-size:13.5px; color:var(--gris-texto); padding-left:18px; position:relative; }
-.example-copy li::before{ content:"✓"; position:absolute; left:0; color:var(--exito); font-weight:800; }
-
-.upload-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+/* ===== 8. DOCUMENTOS (paso explicativo, sin carga de archivos) ===== */
 .whatsapp-note{
   display:flex; gap:14px; align-items:flex-start;
   background:rgba(37,211,102,.08); border:1.5px solid rgba(37,211,102,.35);
-  border-radius:16px; padding:16px 20px; margin-bottom:24px;
+  border-radius:16px; padding:16px 20px; margin-bottom:22px;
 }
 .whatsapp-note .icon{ width:22px; height:22px; color:#1b9c6e; flex-shrink:0; margin-top:1px; }
 .whatsapp-note p{ font-size:13.5px; color:var(--texto); }
 .whatsapp-note strong{ color:#0e7a53; }
-.upload-block{ display:grid; gap:10px; }
-.upload-label{ font-size:13.5px; font-weight:700; }
-.dropzone{
-  border:2px dashed var(--borde); border-radius:16px; padding:28px 16px; text-align:center;
-  cursor:pointer; transition:border-color .2s ease, background .2s ease; background:var(--blanco);
+
+.docs-required{
+  background:var(--blanco); border:1px solid var(--borde); border-radius:16px;
+  padding:20px 22px; margin-bottom:22px;
 }
-.dropzone:hover, .dropzone.dragover{ border-color:var(--azul-principal); background:rgba(0,102,255,.04); }
-.upload-icon{ width:28px; height:28px; margin:0 auto 10px; color:var(--azul-principal); }
-.dropzone p{ font-size:13.5px; color:var(--texto); margin-bottom:4px; }
-.upload-hint{ font-size:11.5px; color:var(--gris-texto); }
-.preview-box{ position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--borde); }
-.preview-box img{ width:100%; height:140px; object-fit:cover; }
-.preview-remove{
-  position:absolute; top:8px; right:8px; width:28px; height:28px; border-radius:50%;
-  background:rgba(6,20,73,.75); border:none; color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;
+.docs-required h3{ font-size:15.5px; margin-bottom:14px; }
+.docs-list{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+.docs-list li{ display:flex; gap:12px; align-items:center; font-size:14px; color:var(--texto); }
+.docs-num{
+  flex-shrink:0; width:26px; height:26px; border-radius:50%;
+  background:var(--azul-principal); color:#fff; font-family:var(--display); font-weight:800; font-size:12.5px;
+  display:flex; align-items:center; justify-content:center;
 }
-.preview-remove .icon{ width:15px; height:15px; }
-.upload-block .field-error{ display:none; }
-.upload-block.invalid .dropzone{ border-color:var(--error); background:rgba(224,57,47,.04); }
-.upload-block.invalid .field-error{ display:block; }
+
+.example-card{
+  display:flex; gap:24px; align-items:flex-start;
+  background:var(--gris-bg); border:1.5px solid var(--azul-electrico);
+  border-radius:18px; padding:22px; margin-bottom:8px;
+}
+.example-photo{
+  flex-shrink:0; width:200px; height:200px; object-fit:cover;
+  border-radius:14px; border:1px solid var(--borde); cursor:pointer;
+}
+.example-photo-lg{ width:100%; max-width:520px; border-radius:16px; display:block; margin:0 auto; }
+.example-copy h3{ font-size:16px; margin-bottom:10px; }
+.example-copy ul{ display:grid; gap:6px; margin-bottom:14px; }
+.example-copy li{ font-size:13.5px; color:var(--gris-texto); padding-left:18px; position:relative; }
+.example-copy li::before{ content:"✓"; position:absolute; left:0; color:var(--exito); font-weight:800; }
 
 /* ===== 9. BOTONES ===== */
 .btn{
@@ -301,7 +295,7 @@ fieldset{ border:none; margin:0; padding:0; }
 .notice-icon{ width:44px; height:44px; color:var(--azul-principal); margin:0 auto; }
 .notice-card .btn{ margin-top:20px; }
 
-.image-modal-card{ max-width:380px; }
+.image-modal-card{ max-width:560px; padding:20px; }
 .modal-close{
   position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%;
   background:var(--gris-bg); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
@@ -352,17 +346,12 @@ fieldset{ border:none; margin:0; padding:0; }
   .form-card{ padding:56px; }
 }
 
-/* Tablets (landscape) y laptops pequeñas: 2 columnas siguen funcionando bien */
-@media (max-width: 1024px){
-  .upload-grid{ grid-template-columns:repeat(3,1fr); gap:16px; }
-}
-
-/* Tablets (portrait): mantener 2 columnas en campos de texto, 2 en documentos */
+/* Tablets (portrait): mantener 2 columnas en campos de texto */
 @media (max-width: 900px){
   .field-grid{ grid-template-columns:repeat(2,1fr); }
   .field-full{ grid-column:1 / -1; }
-  .upload-grid{ grid-template-columns:repeat(2,1fr); }
   .example-card{ flex-direction:column; text-align:center; }
+  .example-photo{ width:100%; height:220px; }
   .example-copy ul{ text-align:left; }
   .progress-step .label{ display:none; }
   .hero-inner{ max-width:100%; }
@@ -371,7 +360,6 @@ fieldset{ border:none; margin:0; padding:0; }
 /* Tablets pequeñas / teléfonos grandes en horizontal */
 @media (max-width: 720px){
   .field-grid{ grid-template-columns:1fr; }
-  .upload-grid{ grid-template-columns:1fr; }
   .form-card{ padding:32px; }
 }
 
@@ -388,7 +376,7 @@ fieldset{ border:none; margin:0; padding:0; }
   .step-title{ font-size:19px; gap:10px; }
   .consent-row{ padding:16px; font-size:13.5px; }
   .example-card{ padding:18px; gap:16px; }
-  .example-visual{ width:96px; height:96px; }
+  .example-photo{ height:180px; }
   .overlay-card{ padding:30px 24px; }
   .whatsapp-note{ flex-direction:column; align-items:flex-start; }
 }
