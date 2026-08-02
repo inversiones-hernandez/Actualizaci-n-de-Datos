@@ -37,7 +37,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#0066ff">
 <link rel="stylesheet" href="style.css">
 
@@ -45,7 +45,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Inversiones Hernández.",
+  "name": "Inversiones Hernández",
   "url": "https://inversiones-hernandez.github.io/ih/",
   "logo": "https://inversiones-hernandez.github.io/ih/assets/icon-512.png",
   "sameAs": [
@@ -87,7 +87,7 @@
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="wrap hero-inner">
-    <div class="eyebrow">Inversiones Hernández · Expediente digital</div>
+    <div class="eyebrow">Préstamos Cloud · Expediente digital</div>
     <h1>Actualiza tus datos personales</h1>
     <p class="hero-sub">Para continuar ofreciéndote un servicio seguro y rápido necesitamos verificar y actualizar tu información personal.</p>
     <button type="button" class="btn btn-primary btn-lg" id="startBtn">
@@ -229,90 +229,32 @@
           Documentos
         </legend>
 
-        <!-- Tarjeta de ejemplo -->
-        <div class="example-card">
-          <div class="example-visual" aria-hidden="true">
-            <svg viewBox="0 0 220 220" class="example-illustration">
-              <circle cx="110" cy="110" r="104" fill="var(--gris-bg)" stroke="var(--azul-electrico)" stroke-width="2" stroke-dasharray="4 8"/>
-              <circle cx="110" cy="78" r="30" fill="none" stroke="var(--azul-principal)" stroke-width="4"/>
-              <path d="M62 168c6-26 26-40 48-40s42 14 48 40" fill="none" stroke="var(--azul-principal)" stroke-width="4" stroke-linecap="round"/>
-              <rect x="76" y="118" width="68" height="42" rx="6" fill="var(--blanco)" stroke="var(--azul-oscuro)" stroke-width="3"/>
-              <circle cx="92" cy="134" r="6" fill="var(--gris-bg)" stroke="var(--azul-oscuro)" stroke-width="2"/>
-              <line x1="104" y1="130" x2="132" y2="130" stroke="var(--azul-oscuro)" stroke-width="2.5"/>
-              <line x1="104" y1="138" x2="128" y2="138" stroke="var(--azul-oscuro)" stroke-width="2.5"/>
-              <line x1="104" y1="146" x2="120" y2="146" stroke="var(--azul-oscuro)" stroke-width="2.5"/>
-            </svg>
-          </div>
-          <div class="example-copy">
-            <h3>Ejemplo de fotografía correcta</h3>
-            <ul>
-              <li>Persona mirando al frente.</li>
-              <li>Sosteniendo el documento de identidad.</li>
-              <li>Documento completamente visible.</li>
-              <li>Buena iluminación y fondo claro.</li>
-            </ul>
-            <button type="button" class="btn btn-ghost btn-sm" id="viewExampleBtn">Ver imagen en tamaño completo</button>
-          </div>
-        </div>
-
         <div class="whatsapp-note">
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
-          <p><strong>Importante:</strong> al finalizar, se abrirá WhatsApp con tus datos. Ahí debes <strong>adjuntar manualmente estas 3 fotos</strong> antes de enviar el mensaje — no se envían solas.</p>
+          <p><strong>Importante:</strong> estas fotos no se suben aquí. Al finalizar el formulario se abrirá WhatsApp con tus datos — ahí debes <strong>adjuntar manualmente las 3 fotos</strong> antes de enviar el mensaje.</p>
         </div>
 
-        <div class="upload-grid">
-          <!-- Foto de perfil -->
-          <div class="upload-block">
-            <label class="upload-label">Foto de perfil *</label>
-            <div class="dropzone" data-target="fotoPerfil" tabindex="0" role="button" aria-label="Subir foto de perfil">
-              <svg class="icon upload-icon" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/></svg>
-              <p><strong>Arrastra tu imagen aquí</strong> o haz clic para seleccionar</p>
-              <span class="upload-hint">También puedes tomar la foto con tu cámara</span>
-              <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" capture="environment" hidden required>
-            </div>
-            <div class="preview-box" id="previewFotoPerfil" hidden>
-              <img alt="Vista previa de foto de perfil">
-              <button type="button" class="preview-remove" data-target="fotoPerfil" aria-label="Quitar imagen">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-            <span class="field-error">Sube tu foto de perfil.</span>
-          </div>
+        <div class="docs-required">
+          <h3>Fotos que debes enviarnos por WhatsApp</h3>
+          <ul class="docs-list">
+            <li><span class="docs-num">1</span> Foto de perfil, sosteniendo tu documento de identidad.</li>
+            <li><span class="docs-num">2</span> Foto del documento de identidad (frontal).</li>
+            <li><span class="docs-num">3</span> Foto del documento de identidad (reverso).</li>
+          </ul>
+        </div>
 
-          <!-- Cédula frontal -->
-          <div class="upload-block">
-            <label class="upload-label">Documento de identidad (frontal) *</label>
-            <div class="dropzone" data-target="fotoCedulaFrontal" tabindex="0" role="button" aria-label="Subir foto frontal de la cédula">
-              <svg class="icon upload-icon" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/></svg>
-              <p><strong>Arrastra tu imagen aquí</strong> o haz clic para seleccionar</p>
-              <span class="upload-hint">También puedes tomar la foto con tu cámara</span>
-              <input type="file" id="fotoCedulaFrontal" name="fotoCedulaFrontal" accept="image/*" capture="environment" hidden required>
-            </div>
-            <div class="preview-box" id="previewFotoCedulaFrontal" hidden>
-              <img alt="Vista previa de cédula frontal">
-              <button type="button" class="preview-remove" data-target="fotoCedulaFrontal" aria-label="Quitar imagen">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-            <span class="field-error">Sube la foto frontal de tu cédula.</span>
-          </div>
-
-          <!-- Cédula reverso -->
-          <div class="upload-block">
-            <label class="upload-label">Documento de identidad (reverso) *</label>
-            <div class="dropzone" data-target="fotoCedulaReverso" tabindex="0" role="button" aria-label="Subir foto del reverso de la cédula">
-              <svg class="icon upload-icon" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/></svg>
-              <p><strong>Arrastra tu imagen aquí</strong> o haz clic para seleccionar</p>
-              <span class="upload-hint">También puedes tomar la foto con tu cámara</span>
-              <input type="file" id="fotoCedulaReverso" name="fotoCedulaReverso" accept="image/*" capture="environment" hidden required>
-            </div>
-            <div class="preview-box" id="previewFotoCedulaReverso" hidden>
-              <img alt="Vista previa de cédula reverso">
-              <button type="button" class="preview-remove" data-target="fotoCedulaReverso" aria-label="Quitar imagen">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-            <span class="field-error">Sube la foto del reverso de tu cédula.</span>
+        <!-- Ejemplo visual real -->
+        <div class="example-card">
+          <img class="example-photo" src="fotos-requeridas.jpg" alt="Ejemplo de las 3 fotografías requeridas: foto de perfil sosteniendo el documento, documento de identidad frontal y documento de identidad reverso" loading="lazy">
+          <div class="example-copy">
+            <h3>Así deben verse tus fotos</h3>
+            <ul>
+              <li>Persona mirando al frente, sosteniendo el documento.</li>
+              <li>Documento completamente visible y legible.</li>
+              <li>Buena iluminación, sin reflejos ni borrosidad.</li>
+              <li>Fondo claro, en formato JPG o PNG.</li>
+            </ul>
+            <button type="button" class="btn btn-ghost btn-sm" id="viewExampleBtn">Ver ejemplo en tamaño completo</button>
           </div>
         </div>
       </fieldset>
@@ -346,7 +288,7 @@
         </button>
         <span class="step-indicator"><span id="stepCurrent">1</span> / 5</span>
         <button type="button" class="btn btn-primary" id="nextBtn">
-          <span id="nextBtnLabel">Paso Final</span>
+          <span id="nextBtnLabel">Siguiente</span>
           <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
         </button>
       </div>
@@ -417,17 +359,7 @@
     <button type="button" class="modal-close" id="closeImageModal" aria-label="Cerrar">
       <svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
-    <svg viewBox="0 0 220 220" class="example-illustration example-illustration-lg">
-      <circle cx="110" cy="110" r="104" fill="var(--gris-bg)" stroke="var(--azul-electrico)" stroke-width="2" stroke-dasharray="4 8"/>
-      <circle cx="110" cy="78" r="30" fill="none" stroke="var(--azul-principal)" stroke-width="4"/>
-      <path d="M62 168c6-26 26-40 48-40s42 14 48 40" fill="none" stroke="var(--azul-principal)" stroke-width="4" stroke-linecap="round"/>
-      <rect x="76" y="118" width="68" height="42" rx="6" fill="var(--blanco)" stroke="var(--azul-oscuro)" stroke-width="3"/>
-      <circle cx="92" cy="134" r="6" fill="var(--gris-bg)" stroke="var(--azul-oscuro)" stroke-width="2"/>
-      <line x1="104" y1="130" x2="132" y2="130" stroke="var(--azul-oscuro)" stroke-width="2.5"/>
-      <line x1="104" y1="138" x2="128" y2="138" stroke="var(--azul-oscuro)" stroke-width="2.5"/>
-      <line x1="104" y1="146" x2="120" y2="146" stroke="var(--azul-oscuro)" stroke-width="2.5"/>
-    </svg>
-    <p>Ejemplo de fotografía correcta</p>
+    <img class="example-photo-lg" src="assets/fotos-requeridas.jpg" alt="Ejemplo de las 3 fotografías requeridas: foto de perfil sosteniendo el documento, documento de identidad frontal y documento de identidad reverso">
   </div>
 </div>
 
