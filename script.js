@@ -216,7 +216,7 @@
 
     return [
       linea,
-      '🏦 INVERSIONES HERNÁNDEZ',
+      '🏦 INVERSIONES HERNÁNDEZ RD',
       'ACTUALIZACIÓN DE DATOS',
       linea,
       '👤 DATOS PERSONALES',
