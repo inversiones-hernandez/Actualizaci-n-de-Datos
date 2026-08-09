@@ -19,9 +19,10 @@
   'use strict';
 
   /* ===== 1. CONFIGURACIÓN Y ESTADO ===== */
-  const WHATSAPP_NUMBER = '18495942190';
-  const TOTAL_STEPS = 5;
-  const STORAGE_KEY = 'ih-actualizacion-datos';
+const TOTAL_STEPS = 5;
+const STORAGE_KEY = 'ih-actualizacion-datos';
+
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwUPIOr05G-XfOMHkdw6mHoLxdAXazK-4-r-fdfTcEsOzj0yOIUuotj66l1acPplWoQ/exec';
 
   let currentStep = 1;
 
@@ -277,22 +278,42 @@
     }, 180);
   }
 
-  function finishSubmit() {
-    // Construimos el mensaje ANTES de reiniciar el formulario (el reset borra los valores).
-    const mensaje = buildWhatsappMessage();
+async function finishSubmit() {
 
+  // Tomamos todos los datos del formulario
+  const datos = new FormData(form);
+
+  try {
+
+    // Enviar datos directamente a Google Apps Script
+    await fetch(GOOGLE_SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: new URLSearchParams(datos)
+    });
+
+    // Mostrar confirmación
     hideLoader();
     showSuccess();
-    clearStorage(); // se borra el borrador guardado — ya no hace falta conservarlo
+    clearStorage();
 
     setTimeout(() => {
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
       hideSuccess();
-      showWhatsappNotice();
       resetFormCompletely();
-    }, 1400);
+    }, 1800);
+
+  } catch (error) {
+
+    console.error('Error enviando los datos:', error);
+
+    hideLoader();
+
+    showToast(
+      'No pudimos enviar la información. Inténtalo nuevamente.',
+      true
+    );
   }
+}
 
   function resetFormCompletely() {
     form.reset();
