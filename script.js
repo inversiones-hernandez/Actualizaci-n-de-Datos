@@ -206,59 +206,6 @@ const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwUPIOr05G-Xf
     return div.innerHTML;
   }
 
-  /* ===== 7. MENSAJE DE WHATSAPP ===== */
-  function buildWhatsappMessage() {
-    const d = new FormData(form);
-    const g = (name) => d.get(name) || '—';
-    const ahora = new Date();
-    const fecha = ahora.toLocaleDateString('es-DO');
-    const hora = ahora.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
-    const linea = '━━━━━━━━━━━━━━━━━━━━━━';
-
-    return [
-      linea,
-      '🏦 INVERSIONES HERNÁNDEZ RD',
-      'ACTUALIZACIÓN DE DATOS',
-      linea,
-      '👤 DATOS PERSONALES',
-      `Nombres: ${g('nombres')}`,
-      `Apellidos: ${g('apellidos')}`,
-      `WhatsApp: ${g('whatsapp')}`,
-      `Apodo: ${g('apodo')}`,
-      `Documento: ${g('documento')}`,
-      `Nacionalidad: ${g('nacionalidad')}`,
-      `Fecha nacimiento: ${g('fechaNacimiento')}`,
-      `Sexo: ${g('sexo')}`,
-      `Estado civil: ${g('estadoCivil')}`,
-      linea,
-      '📞 CONTACTO',
-      `Teléfono principal: ${g('telefonoPrincipal')}`,
-      `Otro teléfono: ${g('otroTelefono')}`,
-      `Correo: ${g('correo')}`,
-      `Dirección: ${g('direccion')}`,
-      `Provincia: ${g('provincia')}`,
-      `Municipio: ${g('municipio')}`,
-      `Sector: ${g('sector')}`,
-      linea,
-      '💼 INFORMACIÓN LABORAL',
-      `Lugar de trabajo: ${g('lugarTrabajo')}`,
-      `Dirección de trabajo: ${g('direccionTrabajo')}`,
-      `Ocupación: ${g('ocupacion')}`,
-      `Ingresos: RD$ ${g('ingresos')}`,
-      `Situación laboral: ${g('situacionLaboral')}`,
-      linea,
-      '📸 DOCUMENTOS (enviar como fotos adjuntas en este chat)',
-      '1. Foto de perfil, sosteniendo el documento de identidad.',
-      '2. Foto del documento de identidad (frontal).',
-      '3. Foto del documento de identidad (reverso).',
-      linea,
-      `Fecha de envío: ${fecha}`,
-      `Hora: ${hora}`,
-      '',
-      'Enviado desde la Plataforma Oficial de Inversiones Hernández.'
-    ].join('\n');
-  }
-
   /* ===== 8. ENVÍO DEL FORMULARIO ===== */
   function handleSubmit(e) {
     e.preventDefault();
@@ -279,21 +226,17 @@ const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwUPIOr05G-Xf
   }
 
 async function finishSubmit() {
-
-  // Tomamos todos los datos del formulario
   const datos = new FormData(form);
 
-  try {
+  hideLoader();
 
-    // Enviar datos directamente a Google Apps Script
+  try {
     await fetch(GOOGLE_SHEETS_URL, {
       method: 'POST',
       mode: 'no-cors',
       body: new URLSearchParams(datos)
     });
 
-    // Mostrar confirmación
-    hideLoader();
     showSuccess();
     clearStorage();
 
@@ -303,10 +246,7 @@ async function finishSubmit() {
     }, 1800);
 
   } catch (error) {
-
     console.error('Error enviando los datos:', error);
-
-    hideLoader();
 
     showToast(
       'No pudimos enviar la información. Inténtalo nuevamente.',
