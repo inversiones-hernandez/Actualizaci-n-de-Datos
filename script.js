@@ -22,7 +22,7 @@
   const STORAGE_KEY = 'ih-actualizacion-datos';
 
   const GOOGLE_SHEETS_URL =
-    'https://script.google.com/macros/s/AKfycbwUPIOr05G-XfOMHkdw6mHoLxdAXazK-4-r-fdfTcEsOzj0yOIUuotj66l1acPplWoQ/exec';
+    'https://script.google.com/macros/s/AKfycby4uj5ImizniWM07vKTBwVLFwa3gppgXwkFBoEeB0Gow4EqfmZmI0D-3LSC5y154242/exec';
 
   const FILE_FIELD_IDS = ['fotoPerfil', 'fotoDocFrente', 'fotoDocReverso'];
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB por foto
