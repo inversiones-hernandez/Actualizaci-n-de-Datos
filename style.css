@@ -190,6 +190,15 @@ fieldset{ border:none; margin:0; padding:0; }
 .field.invalid input, .field.invalid select{ border-color:var(--error); box-shadow:0 0 0 4px rgba(224,57,47,.10); }
 .field.invalid .field-error{ display:block; }
 
+.field-file input[type="file"]{
+  width:100%; padding:11px 14px; border-radius:12px; border:1.5px dashed var(--borde);
+  background:var(--gris-bg); color:var(--texto); font-family:var(--body-font); font-size:13.5px; cursor:pointer;
+}
+.field-file input[type="file"]:focus{ outline:none; border-color:var(--azul-principal); box-shadow:0 0 0 4px rgba(0,102,255,.12); }
+.field-file.invalid input[type="file"]{ border-color:var(--error); box-shadow:0 0 0 4px rgba(224,57,47,.10); }
+.field-file .file-name{ font-size:12px; color:var(--gris-texto); }
+.field-file.has-file .file-name{ color:var(--azul-principal); font-weight:600; }
+
 .consent-row{
   display:flex; gap:12px; align-items:flex-start; font-size:14.5px; color:var(--gris-texto);
   background:var(--gris-bg); border:1px solid var(--borde); border-radius:14px; padding:18px 20px; margin:24px 0 6px;
