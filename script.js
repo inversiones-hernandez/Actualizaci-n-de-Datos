@@ -24,6 +24,9 @@
   const GOOGLE_SHEETS_URL =
     'https://script.google.com/macros/s/AKfycbwUPIOr05G-XfOMHkdw6mHoLxdAXazK-4-r-fdfTcEsOzj0yOIUuotj66l1acPplWoQ/exec';
 
+  const FILE_FIELD_IDS = ['fotoPerfil', 'fotoDocFrente', 'fotoDocReverso'];
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB por foto
+
   let currentStep = 1;
 
   /* ===== 2. UTILIDADES ===== */
@@ -49,7 +52,15 @@
   const Validators = {
     required(input) {
       if (input.type === 'checkbox') return input.checked;
+      if (input.type === 'file') return input.files && input.files.length > 0;
       return input.value.trim().length > 0;
+    },
+    imageFile(input) {
+      if (!input.files || input.files.length === 0) return true; // "required" ya cubre obligatoriedad
+      const file = input.files[0];
+      if (!file.type.startsWith('image/')) return false;
+      if (file.size > MAX_FILE_SIZE) return false;
+      return true;
     },
     email(input) {
       if (!input.value) return true; // el "required" ya cubre obligatoriedad
@@ -85,7 +96,10 @@
     telefonoPrincipal: Validators.dominicanPhone,
     otroTelefono: Validators.dominicanPhone,
     documento: Validators.cedula,
-    fechaNacimiento: Validators.fechaNacimiento
+    fechaNacimiento: Validators.fechaNacimiento,
+    fotoPerfil: Validators.imageFile,
+    fotoDocFrente: Validators.imageFile,
+    fotoDocReverso: Validators.imageFile
   };
 
   function validateField(input) {
@@ -124,6 +138,7 @@
     try {
       const data = {};
       $$('input, select', form).forEach((el) => {
+        if (el.type === 'file') return; // los archivos no se pueden guardar en localStorage
         if (el.type === 'checkbox') { data[el.name] = el.checked; return; }
         data[el.name] = el.value;
       });
@@ -138,7 +153,7 @@
       const data = JSON.parse(raw);
       Object.keys(data).forEach((name) => {
         const el = form.elements[name];
-        if (!el) return;
+        if (!el || el.type === 'file') return; // los archivos no se restauran
         if (el.type === 'checkbox') { el.checked = !!data[name]; }
         else { el.value = data[name]; }
       });
@@ -216,22 +231,21 @@
   }
 
   function submitToGoogleSheets() {
+    // FormData se envía tal cual (multipart/form-data) para incluir las 3 fotos como archivos reales.
     const formData = new FormData(form);
-    const params = new URLSearchParams();
-    formData.forEach((value, key) => params.append(key, value));
 
     // Animación de la barra de progreso mientras se envía la solicitud
     let progress = 0;
     const bar = $('#loaderBarFill');
     const progressTimer = setInterval(() => {
-      progress = Math.min(progress + 8, 90); // se detiene en 90% hasta confirmar el envío
+      progress = Math.min(progress + 5, 90); // se detiene en 90% hasta confirmar el envío
       bar.style.width = progress + '%';
-    }, 150);
+    }, 200);
 
     fetch(GOOGLE_SHEETS_URL, {
       method: 'POST',
       mode: 'no-cors', // Apps Script no permite leer la respuesta entre dominios;
-      body: params      // el envío en sí se confirma porque la petición se completa sin error
+      body: formData    // el envío en sí se confirma porque la petición se completa sin error
     })
       .then(() => {
         clearInterval(progressTimer);
@@ -264,6 +278,12 @@
     $$('.field.invalid', form).forEach((el) => el.classList.remove('invalid'));
     $('#consentError').style.display = 'none';
 
+    // Limpiar la vista previa de los nombres de archivo
+    FILE_FIELD_IDS.forEach((id) => {
+      const input = $(`#${id}`);
+      if (input) updateFileNamePreview(input);
+    });
+
     clearStorage();
     goToStep(1);
   }
@@ -280,11 +300,30 @@
   function bindLiveValidation() {
     $$('input, select', form).forEach((el) => {
       if (el.type === 'checkbox') return;
+      if (el.type === 'file') {
+        el.addEventListener('change', () => {
+          updateFileNamePreview(el);
+          validateField(el);
+        });
+        return;
+      }
       el.addEventListener('blur', () => validateField(el));
       el.addEventListener('input', () => {
         if (el.closest('.field.invalid')) validateField(el);
       });
     });
+  }
+
+  function updateFileNamePreview(input) {
+    const nameEl = $(`#${input.id}Name`);
+    const fieldEl = input.closest('.field-file');
+    if (input.files && input.files.length > 0) {
+      if (nameEl) nameEl.textContent = input.files[0].name;
+      if (fieldEl) fieldEl.classList.add('has-file');
+    } else {
+      if (nameEl) nameEl.textContent = 'Ningún archivo seleccionado';
+      if (fieldEl) fieldEl.classList.remove('has-file');
+    }
   }
 
   function init() {
