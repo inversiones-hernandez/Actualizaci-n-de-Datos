@@ -231,22 +231,22 @@
   }
 
   function submitToGoogleSheets() {
-    // FormData se envía tal cual (multipart/form-data) para incluir las 3 fotos como archivos reales.
-    const formData = new FormData(form);
-
-    // Animación de la barra de progreso mientras se envía la solicitud
+    // Animación de la barra de progreso mientras se preparan y envían los datos
     let progress = 0;
     const bar = $('#loaderBarFill');
     const progressTimer = setInterval(() => {
-      progress = Math.min(progress + 5, 90); // se detiene en 90% hasta confirmar el envío
+      progress = Math.min(progress + 4, 85); // se detiene en 85% hasta confirmar el envío
       bar.style.width = progress + '%';
     }, 200);
 
-    fetch(GOOGLE_SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors', // Apps Script no permite leer la respuesta entre dominios;
-      body: formData    // el envío en sí se confirma porque la petición se completa sin error
-    })
+    convertirFormularioAParametros()
+      .then((params) => {
+        return fetch(GOOGLE_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors', // Apps Script no permite leer la respuesta entre dominios;
+          body: params      // el envío en sí se confirma porque la petición se completa sin error
+        });
+      })
       .then(() => {
         clearInterval(progressTimer);
         bar.style.width = '100%';
@@ -258,6 +258,45 @@
         hideLoader();
         showToast('No se pudo enviar tu información. Verifica tu conexión e intenta de nuevo.', true);
       });
+  }
+
+  // Convierte todos los campos del formulario a un URLSearchParams de texto plano.
+  // Las 3 fotos se leen como base64 y se envían como texto (campo + "Base64",
+  // + "Nombre", + "Tipo"), porque Apps Script no procesa de forma confiable
+  // archivos reales enviados como multipart/form-data desde fetch con no-cors.
+  function convertirFormularioAParametros() {
+    const params = new URLSearchParams();
+    const formData = new FormData(form);
+
+    for (const [key, value] of formData.entries()) {
+      const el = form.elements[key];
+      if (el && el.type === 'file') continue; // los archivos se agregan aparte, como base64
+      params.append(key, value);
+    }
+
+    const lecturas = FILE_FIELD_IDS.map((fieldId) => {
+      const input = $(`#${fieldId}`);
+      if (!input || !input.files || !input.files[0]) return Promise.resolve();
+      return leerArchivoComoBase64(input.files[0]).then((base64) => {
+        params.append(fieldId + 'Base64', base64);
+        params.append(fieldId + 'Nombre', input.files[0].name);
+        params.append(fieldId + 'Tipo', input.files[0].type || 'image/jpeg');
+      });
+    });
+
+    return Promise.all(lecturas).then(() => params);
+  }
+
+  function leerArchivoComoBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const resultado = reader.result; // "data:image/png;base64,AAAA..."
+        resolve(String(resultado).split(',')[1] || '');
+      };
+      reader.onerror = () => reject(new Error('No se pudo leer el archivo ' + file.name));
+      reader.readAsDataURL(file);
+    });
   }
 
   function finishSubmit() {
