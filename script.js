@@ -1,13 +1,23 @@
 /* ==========================================================================
    INVERSIONES HERNÁNDEZ — Actualización de Datos
    script.js — JavaScript modular, sin frameworks
+   ==========================================================================
+   Módulos:
+   1. Configuración y estado
+   2. Utilidades (DOM, toast)
+   3. Validadores
+   4. Persistencia (localStorage)
+   5. Navegación entre pasos
+   6. Resumen de confirmación
+   7. Envío del formulario (Google Sheets vía Apps Script)
+   8. Overlays (loader, éxito, modal de imagen de ejemplo)
+   9. Inicialización
    ========================================================================== */
 
 (() => {
   'use strict';
 
   /* ===== 1. CONFIGURACIÓN Y ESTADO ===== */
-
   const TOTAL_STEPS = 5;
   const STORAGE_KEY = 'ih-actualizacion-datos';
 
@@ -17,7 +27,6 @@
   let currentStep = 1;
 
   /* ===== 2. UTILIDADES ===== */
-
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
@@ -25,18 +34,11 @@
 
   function showToast(message, isError = false) {
     const toast = $('#toast');
-
-    if (!toast) return;
-
     toast.textContent = message;
     toast.classList.toggle('toast-error', isError);
     toast.hidden = false;
-
     clearTimeout(showToast._t);
-
-    showToast._t = setTimeout(() => {
-      toast.hidden = true;
-    }, 3800);
+    showToast._t = setTimeout(() => { toast.hidden = true; }, 3800);
   }
 
   function onlyDigits(str) {
@@ -44,827 +46,277 @@
   }
 
   /* ===== 3. VALIDADORES ===== */
-
   const Validators = {
-
     required(input) {
-      if (input.type === 'checkbox') {
-        return input.checked;
-      }
-
+      if (input.type === 'checkbox') return input.checked;
       return input.value.trim().length > 0;
     },
-
     email(input) {
-      if (!input.value) return true;
-
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        input.value.trim()
-      );
+      if (!input.value) return true; // el "required" ya cubre obligatoriedad
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
     },
-
     dominicanPhone(input) {
       if (!input.value) return true;
-
       const digits = onlyDigits(input.value);
-
       return /^(809|829|849)\d{7}$/.test(digits);
     },
-
     cedula(input) {
       if (!input.value) return true;
-
       const digits = onlyDigits(input.value);
-
       return digits.length === 11;
     },
-
     fechaNacimiento(input) {
       if (!input.value) return true;
-
-      const fecha = new Date(
-        input.value + 'T00:00:00'
-      );
-
-      if (isNaN(fecha.getTime())) {
-        return false;
-      }
-
+      const fecha = new Date(input.value + 'T00:00:00');
+      if (isNaN(fecha.getTime())) return false;
       const hoy = new Date();
-
-      if (fecha > hoy) {
-        return false;
-      }
-
-      let edad =
-        hoy.getFullYear() -
-        fecha.getFullYear();
-
-      const m =
-        hoy.getMonth() -
-        fecha.getMonth();
-
-      if (
-        m < 0 ||
-        (m === 0 && hoy.getDate() < fecha.getDate())
-      ) {
-        edad--;
-      }
-
+      if (fecha > hoy) return false;
+      let edad = hoy.getFullYear() - fecha.getFullYear();
+      const m = hoy.getMonth() - fecha.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < fecha.getDate())) edad--;
       return edad >= 18 && edad <= 100;
     }
   };
 
+  // Mapa de validadores adicionales por id de campo (más allá del "required" nativo)
   const FIELD_VALIDATORS = {
-
     correo: Validators.email,
-
     whatsapp: Validators.dominicanPhone,
-
     telefonoPrincipal: Validators.dominicanPhone,
-
     otroTelefono: Validators.dominicanPhone,
-
     documento: Validators.cedula,
-
     fechaNacimiento: Validators.fechaNacimiento
   };
 
   function validateField(input) {
-
     const fieldEl = input.closest('.field');
-
     let valid = Validators.required(input);
-
-    if (
-      valid &&
-      FIELD_VALIDATORS[input.id]
-    ) {
+    if (valid && FIELD_VALIDATORS[input.id]) {
       valid = FIELD_VALIDATORS[input.id](input);
     }
-
-    if (fieldEl) {
-      fieldEl.classList.toggle(
-        'invalid',
-        !valid
-      );
-    }
-
+    if (fieldEl) fieldEl.classList.toggle('invalid', !valid);
     return valid;
   }
 
   function validateStep(stepNumber) {
-
-    const stepEl =
-      $(`.step[data-step="${stepNumber}"]`);
-
+    const stepEl = $(`.step[data-step="${stepNumber}"]`);
     if (!stepEl) return true;
-
     let allValid = true;
 
-    $$(
-      'input[required], select[required]',
-      stepEl
-    ).forEach((input) => {
-
-      if (!validateField(input)) {
-        allValid = false;
-      }
-
+    $$('input[required], select[required]', stepEl).forEach((input) => {
+      if (!validateField(input)) allValid = false;
     });
 
-    /* Checkbox de consentimiento */
-
+    // Checkbox de consentimiento (paso 5)
     if (stepNumber === 5) {
-
-      const consent =
-        $('#consentimiento');
-
-      if (consent) {
-
-        const ok = consent.checked;
-
-        const consentError =
-          $('#consentError');
-
-        if (consentError) {
-          consentError.style.display =
-            ok ? 'none' : 'block';
-        }
-
-        if (!ok) {
-          allValid = false;
-        }
-      }
+      const consent = $('#consentimiento');
+      const ok = consent.checked;
+      $('#consentError').style.display = ok ? 'none' : 'block';
+      if (!ok) allValid = false;
     }
 
-    if (!allValid) {
-
-      showToast(
-        'Revisa los campos marcados antes de continuar.',
-        true
-      );
-
-    }
-
+    if (!allValid) showToast('Revisa los campos marcados antes de continuar.', true);
     return allValid;
   }
 
-  /* ===== 4. PERSISTENCIA ===== */
-
+  /* ===== 4. PERSISTENCIA (localStorage) ===== */
   function saveToStorage() {
-
     try {
-
       const data = {};
-
-      $$(
-        'input, select',
-        form
-      ).forEach((el) => {
-
-        if (el.type === 'checkbox') {
-
-          data[el.name] = el.checked;
-
-          return;
-        }
-
+      $$('input, select', form).forEach((el) => {
+        if (el.type === 'checkbox') { data[el.name] = el.checked; return; }
         data[el.name] = el.value;
-
       });
-
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-      );
-
-    } catch (e) {
-
-      /* Continuar sin autoguardado */
-
-    }
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) { /* almacenamiento no disponible; continuar sin autoguardado */ }
   }
 
   function restoreFromStorage() {
-
     try {
-
-      const raw =
-        window.localStorage.getItem(
-          STORAGE_KEY
-        );
-
+      const raw = window.localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
-
-      const data =
-        JSON.parse(raw);
-
+      const data = JSON.parse(raw);
       Object.keys(data).forEach((name) => {
-
-        const el =
-          form.elements[name];
-
+        const el = form.elements[name];
         if (!el) return;
-
-        if (el.type === 'checkbox') {
-
-          el.checked = !!data[name];
-
-        } else {
-
-          el.value = data[name];
-
-        }
-
+        if (el.type === 'checkbox') { el.checked = !!data[name]; }
+        else { el.value = data[name]; }
       });
-
-    } catch (e) {
-
-      /* Ignorar datos corruptos */
-
-    }
+    } catch (e) { /* datos corruptos o no disponibles; ignorar */ }
   }
 
   function clearStorage() {
-
-    try {
-
-      window.localStorage.removeItem(
-        STORAGE_KEY
-      );
-
-    } catch (e) {}
-
+    try { window.localStorage.removeItem(STORAGE_KEY); } catch (e) {}
   }
 
-  /* ===== 5. NAVEGACIÓN ===== */
-
+  /* ===== 5. NAVEGACIÓN ENTRE PASOS ===== */
   function goToStep(step) {
-
-    if (
-      step < 1 ||
-      step > TOTAL_STEPS
-    ) {
-      return;
-    }
-
+    if (step < 1 || step > TOTAL_STEPS) return;
     currentStep = step;
 
-    $$('.step').forEach((el) => {
-
-      el.classList.toggle(
-        'active',
-        Number(el.dataset.step) === step
-      );
-
-    });
-
+    $$('.step').forEach((el) => el.classList.toggle('active', Number(el.dataset.step) === step));
     $$('.progress-step').forEach((el) => {
-
-      const n =
-        Number(el.dataset.step);
-
-      el.classList.toggle(
-        'active',
-        n === step
-      );
-
-      el.classList.toggle(
-        'done',
-        n < step
-      );
-
+      const n = Number(el.dataset.step);
+      el.classList.toggle('active', n === step);
+      el.classList.toggle('done', n < step);
     });
 
-    const progressFill =
-      $('#progressFill');
+    $('#progressFill').style.width = `${(step / TOTAL_STEPS) * 100}%`;
+    $('#stepCurrent').textContent = step;
+    $('#prevBtn').disabled = step === 1;
+    $('#nextBtn').hidden = step === TOTAL_STEPS;
+    $('#submitBtn').style.display = step === TOTAL_STEPS ? 'inline-flex' : 'none';
+    $('#nextBtnLabel').textContent = step === TOTAL_STEPS - 1 ? 'Paso final' : 'Siguiente';
 
-    if (progressFill) {
+    if (step === TOTAL_STEPS) renderSummary();
 
-      progressFill.style.width =
-        `${(step / TOTAL_STEPS) * 100}%`;
-
-    }
-
-    const stepCurrent =
-      $('#stepCurrent');
-
-    if (stepCurrent) {
-      stepCurrent.textContent =
-        step;
-    }
-
-    const prevBtn =
-      $('#prevBtn');
-
-    if (prevBtn) {
-      prevBtn.disabled =
-        step === 1;
-    }
-
-    const nextBtn =
-      $('#nextBtn');
-
-    if (nextBtn) {
-      nextBtn.hidden =
-        step === TOTAL_STEPS;
-    }
-
-    const submitBtn =
-      $('#submitBtn');
-
-    if (submitBtn) {
-
-      submitBtn.style.display =
-        step === TOTAL_STEPS
-          ? 'inline-flex'
-          : 'none';
-
-    }
-
-    const nextBtnLabel =
-      $('#nextBtnLabel');
-
-    if (nextBtnLabel) {
-
-      nextBtnLabel.textContent =
-        step === TOTAL_STEPS - 1
-          ? 'Paso final'
-          : 'Siguiente';
-
-    }
-
-    if (step === TOTAL_STEPS) {
-      renderSummary();
-    }
-
-    const formulario =
-      $('#formulario');
-
-    if (formulario) {
-
-      formulario.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-    }
+    $('#formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function nextStep() {
-
-    if (!validateStep(currentStep)) {
-      return;
-    }
-
+    if (!validateStep(currentStep)) return;
     saveToStorage();
-
-    goToStep(
-      currentStep + 1
-    );
+    goToStep(currentStep + 1);
   }
 
   function prevStep() {
-
-    goToStep(
-      currentStep - 1
-    );
+    goToStep(currentStep - 1);
   }
 
-  /* ===== 6. RESUMEN ===== */
-
+  /* ===== 6. RESUMEN DE CONFIRMACIÓN ===== */
   function renderSummary() {
-
-    const data =
-      new FormData(form);
-
+    const data = new FormData(form);
     const rows = [
-
-      [
-        'Nombre completo',
-        `${data.get('nombres') || ''} ${data.get('apellidos') || ''}`
-      ],
-
-      [
-        'Documento',
-        data.get('documento')
-      ],
-
-      [
-        'WhatsApp',
-        data.get('whatsapp')
-      ],
-
-      [
-        'Correo',
-        data.get('correo')
-      ],
-
-      [
-        'Dirección',
-        `${data.get('direccion') || ''}, ${data.get('sector') || ''}, ${data.get('municipio') || ''}, ${data.get('provincia') || ''}`
-      ],
-
-      [
-        'Ocupación',
-        data.get('ocupacion')
-      ],
-
-      [
-        'Situación laboral',
-        data.get('situacionLaboral')
-      ]
-
+      ['Nombre completo', `${data.get('nombres')} ${data.get('apellidos')}`],
+      ['Documento', data.get('documento')],
+      ['WhatsApp', data.get('whatsapp')],
+      ['Correo', data.get('correo')],
+      ['Dirección', `${data.get('direccion')}, ${data.get('sector')}, ${data.get('municipio')}, ${data.get('provincia')}`],
+      ['Ocupación', data.get('ocupacion')],
+      ['Situación laboral', data.get('situacionLaboral')]
     ];
-
-    const summaryBox =
-      $('#summaryBox');
-
-    if (!summaryBox) return;
-
-    summaryBox.innerHTML =
-      rows
-        .map(([label, value]) => {
-
-          return `
-            <div>
-              <strong>${label}:</strong>
-              ${escapeHtml(
-                String(value || '—')
-              )}
-            </div>
-          `;
-
-        })
-        .join('');
+    $('#summaryBox').innerHTML = rows
+      .map(([label, value]) => `<div><strong>${label}:</strong> ${escapeHtml(String(value || '—'))}</div>`)
+      .join('');
   }
 
   function escapeHtml(str) {
-
-    const div =
-      document.createElement('div');
-
+    const div = document.createElement('div');
     div.textContent = str;
-
     return div.innerHTML;
   }
 
   /* ===== 7. ENVÍO DEL FORMULARIO ===== */
-
   function handleSubmit(e) {
-
     e.preventDefault();
-
-    if (!validateStep(5)) {
-      return;
-    }
+    if (!validateStep(5)) return;
 
     showLoader();
+    submitToGoogleSheets();
+  }
 
+  function submitToGoogleSheets() {
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    formData.forEach((value, key) => params.append(key, value));
+
+    // Animación de la barra de progreso mientras se envía la solicitud
     let progress = 0;
+    const bar = $('#loaderBarFill');
+    const progressTimer = setInterval(() => {
+      progress = Math.min(progress + 8, 90); // se detiene en 90% hasta confirmar el envío
+      bar.style.width = progress + '%';
+    }, 150);
 
-    const bar =
-      $('#loaderBarFill');
-
-    const interval =
-      setInterval(() => {
-
-        progress =
-          Math.min(
-            progress + 18,
-            100
-          );
-
-        if (bar) {
-          bar.style.width =
-            progress + '%';
-        }
-
-        if (progress >= 100) {
-
-          clearInterval(interval);
-
-          setTimeout(
-            finishSubmit,
-            300
-          );
-
-        }
-
-      }, 180);
+    fetch(GOOGLE_SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script no permite leer la respuesta entre dominios;
+      body: params      // el envío en sí se confirma porque la petición se completa sin error
+    })
+      .then(() => {
+        clearInterval(progressTimer);
+        bar.style.width = '100%';
+        setTimeout(finishSubmit, 300);
+      })
+      .catch((error) => {
+        clearInterval(progressTimer);
+        console.error('Error al enviar el formulario:', error);
+        hideLoader();
+        showToast('No se pudo enviar tu información. Verifica tu conexión e intenta de nuevo.', true);
+      });
   }
 
-  async function finishSubmit() {
+  function finishSubmit() {
+    hideLoader();
+    showSuccess();
+    clearStorage(); // se borra el borrador guardado — ya no hace falta conservarlo
 
-    const datos =
-      new FormData(form);
-
-    try {
-
-      const respuesta =
-        await fetch(
-          GOOGLE_SHEETS_URL,
-          {
-            method: 'POST',
-            mode: 'no-cors',
-            body: new URLSearchParams(datos)
-          }
-        );
-
-      console.log(
-        'Datos enviados correctamente.'
-      );
-
-      hideLoader();
-
-      showSuccess();
-
-      clearStorage();
-
-      setTimeout(() => {
-
-        hideSuccess();
-
-        resetFormCompletely();
-
-      }, 1800);
-
-    } catch (error) {
-
-      console.error(
-        'Error enviando los datos:',
-        error
-      );
-
-      hideLoader();
-
-      showToast(
-        'No pudimos enviar la información. Inténtalo nuevamente.',
-        true
-      );
-    }
+    setTimeout(() => {
+      hideSuccess();
+      resetFormCompletely();
+    }, 2200);
   }
-
-  /* ===== 8. REINICIO ===== */
 
   function resetFormCompletely() {
-
     form.reset();
 
-    $$('.field.invalid', form)
-      .forEach((el) => {
-
-        el.classList.remove(
-          'invalid'
-        );
-
-      });
-
-    const consentError =
-      $('#consentError');
-
-    if (consentError) {
-      consentError.style.display =
-        'none';
-    }
+    // Limpiar estados de validación visual
+    $$('.field.invalid', form).forEach((el) => el.classList.remove('invalid'));
+    $('#consentError').style.display = 'none';
 
     clearStorage();
-
     goToStep(1);
   }
 
-  /* ===== 9. OVERLAYS ===== */
+  /* ===== 8. OVERLAYS ===== */
+  function showLoader() { $('#loaderBarFill').style.width = '0%'; $('#loaderOverlay').hidden = false; }
+  function hideLoader() { $('#loaderOverlay').hidden = true; }
+  function showSuccess() { $('#successOverlay').hidden = false; }
+  function hideSuccess() { $('#successOverlay').hidden = true; }
+  function showImageModal() { $('#imageModal').hidden = false; }
+  function hideImageModal() { $('#imageModal').hidden = true; }
 
-  function showLoader() {
-
-    const loader =
-      $('#loaderOverlay');
-
-    const bar =
-      $('#loaderBarFill');
-
-    if (bar) {
-      bar.style.width = '0%';
-    }
-
-    if (loader) {
-      loader.hidden = false;
-    }
-  }
-
-  function hideLoader() {
-
-    const loader =
-      $('#loaderOverlay');
-
-    if (loader) {
-      loader.hidden = true;
-    }
-  }
-
-  function showSuccess() {
-
-    const success =
-      $('#successOverlay');
-
-    if (success) {
-      success.hidden = false;
-    }
-  }
-
-  function hideSuccess() {
-
-    const success =
-      $('#successOverlay');
-
-    if (success) {
-      success.hidden = true;
-    }
-  }
-
-  function showImageModal() {
-
-    const modal =
-      $('#imageModal');
-
-    if (modal) {
-      modal.hidden = false;
-    }
-  }
-
-  function hideImageModal() {
-
-    const modal =
-      $('#imageModal');
-
-    if (modal) {
-      modal.hidden = true;
-    }
-  }
-
-  /* ===== 10. INICIALIZACIÓN ===== */
-
+  /* ===== 9. INICIALIZACIÓN ===== */
   function bindLiveValidation() {
-
-    $$(
-      'input, select',
-      form
-    ).forEach((el) => {
-
-      if (
-        el.type === 'checkbox'
-      ) {
-        return;
-      }
-
-      el.addEventListener(
-        'blur',
-        () => validateField(el)
-      );
-
-      el.addEventListener(
-        'input',
-        () => {
-
-          if (
-            el.closest(
-              '.field.invalid'
-            )
-          ) {
-            validateField(el);
-          }
-
-        }
-      );
-
+    $$('input, select', form).forEach((el) => {
+      if (el.type === 'checkbox') return;
+      el.addEventListener('blur', () => validateField(el));
+      el.addEventListener('input', () => {
+        if (el.closest('.field.invalid')) validateField(el);
+      });
     });
   }
 
   function init() {
-
     restoreFromStorage();
-
     bindLiveValidation();
 
-    const startBtn =
-      $('#startBtn');
+    $('#startBtn').addEventListener('click', () => {
+      $('#formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
-    if (startBtn) {
+    $('#nextBtn').addEventListener('click', nextStep);
+    $('#prevBtn').addEventListener('click', prevStep);
+    form.addEventListener('submit', handleSubmit);
 
-      startBtn.addEventListener(
-        'click',
-        () => {
+    $('#viewExampleBtn').addEventListener('click', showImageModal);
+    const exPhoto = $('.example-photo');
+    if (exPhoto) exPhoto.addEventListener('click', showImageModal);
+    $('#closeImageModal').addEventListener('click', hideImageModal);
 
-          const formulario =
-            $('#formulario');
-
-          if (formulario) {
-
-            formulario.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-
-          }
-
-        }
-      );
-    }
-
-    const nextBtn =
-      $('#nextBtn');
-
-    if (nextBtn) {
-      nextBtn.addEventListener(
-        'click',
-        nextStep
-      );
-    }
-
-    const prevBtn =
-      $('#prevBtn');
-
-    if (prevBtn) {
-      prevBtn.addEventListener(
-        'click',
-        prevStep
-      );
-    }
-
-    form.addEventListener(
-      'submit',
-      handleSubmit
-    );
-
-    const viewExampleBtn =
-      $('#viewExampleBtn');
-
-    if (viewExampleBtn) {
-
-      viewExampleBtn.addEventListener(
-        'click',
-        showImageModal
-      );
-
-    }
-
-    const exPhoto =
-      $('.example-photo');
-
-    if (exPhoto) {
-
-      exPhoto.addEventListener(
-        'click',
-        showImageModal
-      );
-
-    }
-
-    const closeImageModal =
-      $('#closeImageModal');
-
-    if (closeImageModal) {
-
-      closeImageModal.addEventListener(
-        'click',
-        hideImageModal
-      );
-
-    }
-
-    /* Autoguardado */
-
-    form.addEventListener(
-      'input',
-      debounce(
-        saveToStorage,
-        500
-      )
-    );
+    // Autoguardado periódico mientras el usuario escribe
+    form.addEventListener('input', debounce(saveToStorage, 500));
 
     goToStep(1);
   }
 
   function debounce(fn, wait) {
-
     let t;
-
     return (...args) => {
-
       clearTimeout(t);
-
-      t = setTimeout(
-        () => fn(...args),
-        wait
-      );
-
+      t = setTimeout(() => fn(...args), wait);
     };
   }
 
-  document.addEventListener(
-    'DOMContentLoaded',
-    init
-  );
-
+  document.addEventListener('DOMContentLoaded', init);
 })();
