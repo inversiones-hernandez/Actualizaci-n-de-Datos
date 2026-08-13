@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<!--
+  INVERSIONES HERNÁNDEZ — Actualización de Datos para Préstamos Cloud
+  ====================================================================
+  Página independiente (index.html / style.css / script.js) pensada para
+  colocarse en /actualizar-datos/ dentro del sitio principal, reutilizando
+  los assets de marca ya generados (logo, favicons, og-image).
+
+  Nota de diseño: se usan íconos SVG en línea (el mismo sistema que el
+  resto del sitio) en lugar de Font Awesome, por rendimiento y consistencia
+  visual — ver mensaje de entrega para el detalle de esta decisión.
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Actualización de Datos — Inversiones Hernández</title>
+<meta name="description" content="Actualiza tu información personal, de contacto, laboral y tus documentos de forma segura para tu expediente en Préstamos Cloud.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://portal.inversioneshernandezrd.com/actualizar.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Inversiones Hernández">
+<meta property="og:title" content="Actualización de Datos — Inversiones Hernández">
+<meta property="og:description" content="Actualiza tu información de forma segura para tu expediente en Préstamos Cloud.">
+<meta property="og:url" content="https://portal.inversioneshernandezrd.com/actualizar.html">
+<meta property="og:image" content="https://portal.inversioneshernandezrd.com/og-image.png">
+<meta property="og:locale" content="es_DO">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0066ff">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Inversiones Hernández",
+  "url": "https://inversioneshernandezrd.com/",
+  "logo": "https://inversioneshernandezrd.com/assets/icon-512.png",
+  "sameAs": [
+    "https://www.facebook.com/people/Inversiones-Hern%C3%A1ndez/61592151383152/",
+    "https://www.instagram.com/inversioneshernandezrd/",
+    "https://www.tiktok.com/@inversioneshernandezrd"
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#formulario">Saltar al formulario</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <img class="brand-mark" src="logo-horizontal.png" alt="Inversiones Hernández — Impulsando tu crecimiento financiero">
+    </a>
+    <div class="trust-badges" aria-label="Indicadores de seguridad">
+      <span class="badge-pill">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        Actualización de Datos
+      </span>
+      <span class="badge-pill">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        Protección SSL
+      </span>
+      <span class="badge-pill">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15" r="1.6"/></svg>
+        Datos Encriptados
+      </span>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Préstamos Cloud · Expediente digital</div>
+    <h1>Actualiza tus datos personales</h1>
+    <p class="hero-sub">Para continuar ofreciéndote un servicio seguro y rápido necesitamos verificar y actualizar tu información personal.</p>
+    <button type="button" class="btn btn-primary btn-lg" id="startBtn">
+      Comenzar actualización
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </button>
+    <div class="hero-trust">
+      <div class="trust-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/></svg>Conexión segura</div>
+      <div class="trust-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Toma menos de 5 minutos</div>
+      <div class="trust-item"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Uso exclusivo para tu expediente</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORMULARIO ============ -->
+<section class="form-section" id="formulario">
+  <div class="wrap">
+
+    <!-- Barra de progreso -->
+    <div class="progress-wrap" aria-hidden="false">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <ol class="progress-steps" id="progressSteps">
+        <li class="progress-step active" data-step="1"><span class="dot">1</span><span class="label">Datos personales</span></li>
+        <li class="progress-step" data-step="2"><span class="dot">2</span><span class="label">Contacto</span></li>
+        <li class="progress-step" data-step="3"><span class="dot">3</span><span class="label">Laboral</span></li>
+        <li class="progress-step" data-step="4"><span class="dot">4</span><span class="label">Documentos</span></li>
+        <li class="progress-step" data-step="5"><span class="dot">5</span><span class="label">Confirmar</span></li>
+      </ol>
+    </div>
+
+    <form id="updateForm" class="glass-card form-card" novalidate autocomplete="on">
+
+      <!-- Campo trampa para bots: invisible para personas, si llega lleno se descarta el envío -->
+      <div class="honeypot-field" aria-hidden="true">
+        <label for="sitioWeb">No llenar este campo</label>
+        <input type="text" id="sitioWeb" name="sitioWeb" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- ===== PASO 1: DATOS PERSONALES ===== -->
+      <fieldset class="step active" data-step="1">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Datos personales
+        </legend>
+
+        <div class="field-grid">
+          <div class="field"><label for="nombres">Nombres *</label><input type="text" id="nombres" name="nombres" required autocomplete="given-name"><span class="field-error">Escribe tus nombres.</span></div>
+          <div class="field"><label for="apellidos">Apellidos *</label><input type="text" id="apellidos" name="apellidos" required autocomplete="family-name"><span class="field-error">Escribe tus apellidos.</span></div>
+          <div class="field"><label for="whatsapp">WhatsApp *</label><input type="tel" id="whatsapp" name="whatsapp" required placeholder="809-000-0000" inputmode="numeric"><span class="field-error">Escribe un número dominicano válido (809/829/849).</span></div>
+          <div class="field"><label for="apodo">Apodo</label><input type="text" id="apodo" name="apodo"></div>
+          <div class="field"><label for="documento">Documento de identidad *</label><input type="text" id="documento" name="documento" required placeholder="000-0000000-0" inputmode="numeric"><span class="field-error">Escribe una cédula válida (11 dígitos).</span></div>
+          <div class="field"><label for="nacionalidad">Nacionalidad *</label><input type="text" id="nacionalidad" name="nacionalidad" required value="Dominicana"><span class="field-error">Escribe tu nacionalidad.</span></div>
+          <div class="field"><label for="fechaNacimiento">Fecha de nacimiento *</label><input type="date" id="fechaNacimiento" name="fechaNacimiento" required><span class="field-error">Debes ser mayor de 18 años.</span></div>
+          <div class="field">
+            <label for="sexo">Sexo *</label>
+            <select id="sexo" name="sexo" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+            </select>
+            <span class="field-error">Selecciona una opción.</span>
+          </div>
+          <div class="field">
+            <label for="estadoCivil">Estado civil *</label>
+            <select id="estadoCivil" name="estadoCivil" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="Soltero/a">Soltero/a</option>
+              <option value="Casado/a">Casado/a</option>
+              <option value="Unión libre">Unión libre</option>
+              <option value="Divorciado/a">Divorciado/a</option>
+              <option value="Viudo/a">Viudo/a</option>
+            </select>
+            <span class="field-error">Selecciona una opción.</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ===== PASO 2: CONTACTO ===== -->
+      <fieldset class="step" data-step="2">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v2a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 013 4.2 2 2 0 015 2h2a2 2 0 012 1.7c.1.9.3 1.8.6 2.6a2 2 0 01-.5 2.1L8 9.7a16 16 0 006 6l1.4-1.4a2 2 0 012.1-.5c.8.3 1.7.5 2.6.6a2 2 0 012 2.5z"/></svg>
+          Contacto
+        </legend>
+
+        <div class="field-grid">
+          <div class="field"><label for="telefonoPrincipal">Teléfono principal *</label><input type="tel" id="telefonoPrincipal" name="telefonoPrincipal" required placeholder="809-000-0000" inputmode="numeric"><span class="field-error">Escribe un número dominicano válido.</span></div>
+          <div class="field"><label for="otroTelefono">Otro teléfono</label><input type="tel" id="otroTelefono" name="otroTelefono" placeholder="809-000-0000" inputmode="numeric"><span class="field-error">Escribe un número dominicano válido.</span></div>
+          <div class="field"><label for="correo">Correo electrónico *</label><input type="email" id="correo" name="correo" required autocomplete="email"><span class="field-error">Escribe un correo válido.</span></div>
+          <div class="field field-full"><label for="direccion">Dirección *</label><input type="text" id="direccion" name="direccion" required autocomplete="street-address"><span class="field-error">Escribe tu dirección.</span></div>
+          <div class="field">
+            <label for="provincia">Provincia *</label>
+            <select id="provincia" name="provincia" required>
+              <option value="" disabled selected>Selecciona tu provincia</option>
+              <option>Azua</option><option>Bahoruco</option><option>Barahona</option><option>Dajabón</option>
+              <option>Distrito Nacional</option><option>Duarte</option><option>El Seibo</option><option>Elías Piña</option>
+              <option>Espaillat</option><option>Hato Mayor</option><option>Hermanas Mirabal</option><option>Independencia</option>
+              <option>La Altagracia</option><option>La Romana</option><option>La Vega</option><option>María Trinidad Sánchez</option>
+              <option>Monseñor Nouel</option><option>Monte Cristi</option><option>Monte Plata</option><option>Pedernales</option>
+              <option>Peravia</option><option>Puerto Plata</option><option>Samaná</option><option>San Cristóbal</option>
+              <option>San José de Ocoa</option><option>San Juan</option><option>San Pedro de Macorís</option><option>Sánchez Ramírez</option>
+              <option>Santiago</option><option>Santiago Rodríguez</option><option>Santo Domingo</option><option>Valverde</option>
+            </select>
+            <span class="field-error">Selecciona tu provincia.</span>
+          </div>
+          <div class="field"><label for="municipio">Municipio *</label><input type="text" id="municipio" name="municipio" required><span class="field-error">Escribe tu municipio.</span></div>
+          <div class="field"><label for="sector">Sector *</label><input type="text" id="sector" name="sector" required><span class="field-error">Escribe tu sector.</span></div>
+        </div>
+
+        <div class="field-full">
+          <label>Marca tu ubicación en el mapa *</label>
+          <p class="map-instructions">Mueve el marcador hasta el punto exacto de tu casa o negocio (puedes arrastrarlo o tocar el mapa).</p>
+          <div id="mapaUbicacion" class="map-container"></div>
+          <p class="map-coords-preview" id="mapCoordsPreview">Aún no has colocado el marcador.</p>
+          <input type="hidden" id="latitud" name="latitud">
+          <input type="hidden" id="longitud" name="longitud">
+          <span class="field-error map-error" id="mapaError">Coloca el marcador en el mapa antes de continuar.</span>
+        </div>
+      </fieldset>
+
+      <!-- ===== PASO 3: INFORMACIÓN LABORAL ===== -->
+      <fieldset class="step" data-step="3">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          Información laboral
+        </legend>
+
+        <div class="field-grid">
+          <div class="field"><label for="lugarTrabajo">Lugar de trabajo *</label><input type="text" id="lugarTrabajo" name="lugarTrabajo" required><span class="field-error">Escribe tu lugar de trabajo.</span></div>
+          <div class="field field-full"><label for="direccionTrabajo">Dirección del trabajo *</label><input type="text" id="direccionTrabajo" name="direccionTrabajo" required><span class="field-error">Escribe la dirección de tu trabajo.</span></div>
+          <div class="field"><label for="ocupacion">Ocupación *</label><input type="text" id="ocupacion" name="ocupacion" required><span class="field-error">Escribe tu ocupación.</span></div>
+          <div class="field"><label for="ingresos">Ingresos mensuales (RD$) *</label><input type="number" id="ingresos" name="ingresos" required min="0" step="1" inputmode="numeric"><span class="field-error">Escribe un monto válido.</span></div>
+          <div class="field field-full">
+            <label for="situacionLaboral">Situación laboral *</label>
+            <select id="situacionLaboral" name="situacionLaboral" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option>Empleado fijo</option>
+              <option>Empleado temporal</option>
+              <option>Independiente</option>
+              <option>Comerciante</option>
+              <option>Empresario</option>
+              <option>Desempleado</option>
+              <option>Jubilado</option>
+            </select>
+            <span class="field-error">Selecciona una opción.</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ===== PASO 4: DOCUMENTOS ===== -->
+      <fieldset class="step" data-step="4">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-9 9"/></svg>
+          Documentos
+        </legend>
+
+        <div class="whatsapp-note">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+          <p><strong>Importante:</strong> sube aquí las 3 fotos solicitadas. Se enviarán junto con el resto de tu información — no necesitas usar WhatsApp ni ningún otro medio.</p>
+        </div>
+
+        <div class="docs-required">
+          <h3>Fotos que debes subir</h3>
+          <ul class="docs-list">
+            <li><span class="docs-num">1</span> Foto de perfil, sosteniendo tu documento de identidad.</li>
+            <li><span class="docs-num">2</span> Foto del documento de identidad (frontal).</li>
+            <li><span class="docs-num">3</span> Foto del documento de identidad (reverso).</li>
+          </ul>
+        </div>
+
+        <div class="field-grid">
+          <div class="field field-file">
+            <label for="fotoPerfil">Foto de perfil con documento *</label>
+            <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" required>
+            <span class="file-name" id="fotoPerfilName">Ningún archivo seleccionado</span>
+            <span class="field-error">Sube una foto de perfil sosteniendo tu documento (JPG o PNG, máx. 5 MB).</span>
+          </div>
+          <div class="field field-file">
+            <label for="fotoDocFrente">Documento de identidad (frontal) *</label>
+            <input type="file" id="fotoDocFrente" name="fotoDocFrente" accept="image/*" required>
+            <span class="file-name" id="fotoDocFrenteName">Ningún archivo seleccionado</span>
+            <span class="field-error">Sube la foto frontal de tu documento (JPG o PNG, máx. 5 MB).</span>
+          </div>
+          <div class="field field-file">
+            <label for="fotoDocReverso">Documento de identidad (reverso) *</label>
+            <input type="file" id="fotoDocReverso" name="fotoDocReverso" accept="image/*" required>
+            <span class="file-name" id="fotoDocReversoName">Ningún archivo seleccionado</span>
+            <span class="field-error">Sube la foto del reverso de tu documento (JPG o PNG, máx. 5 MB).</span>
+          </div>
+        </div>
+
+        <!-- Ejemplo visual real -->
+        <div class="example-card">
+          <img class="example-photo" src="fotos-requeridas.jpg" alt="Ejemplo de las 3 fotografías requeridas: foto de perfil sosteniendo el documento, documento de identidad frontal y documento de identidad reverso" loading="lazy">
+          <div class="example-copy">
+            <h3>Así deben verse tus fotos</h3>
+            <ul>
+              <li>Persona mirando al frente, sosteniendo el documento.</li>
+              <li>Documento completamente visible y legible.</li>
+              <li>Buena iluminación, sin reflejos ni borrosidad.</li>
+              <li>Fondo claro, en formato JPG o PNG.</li>
+            </ul>
+            <button type="button" class="btn btn-ghost btn-sm" id="viewExampleBtn">Ver ejemplo en tamaño completo</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ===== PASO 5: CONFIRMACIÓN ===== -->
+      <fieldset class="step" data-step="5">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+          Confirmación
+        </legend>
+
+        <div class="summary-box" id="summaryBox" aria-live="polite"></div>
+
+        <label class="consent-row">
+          <input type="checkbox" id="consentimiento" name="consentimiento" required>
+          <span>Confirmo que toda la información suministrada es correcta y autorizo a Inversiones Hernández a utilizarla únicamente para fines de actualización de mi expediente en Préstamos Cloud.</span>
+        </label>
+        <span class="field-error" id="consentError">Debes confirmar y autorizar el uso de tus datos.</span>
+
+        <button type="submit" class="btn btn-primary btn-huge" id="submitBtn">
+          Actualizar información
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        </button>
+      </fieldset>
+
+      <!-- ===== NAVEGACIÓN DEL FORMULARIO ===== -->
+      <div class="form-nav">
+        <button type="button" class="btn btn-ghost" id="prevBtn" disabled>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          Atrás
+        </button>
+        <span class="step-indicator"><span id="stepCurrent">1</span> / 5</span>
+        <button type="button" class="btn btn-primary" id="nextBtn">
+          <span id="nextBtnLabel">Siguiente</span>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-top">
+      <span>© 2026 Inversiones Hernández.</span>
+      <div class="footer-socials">
+        <a href="https://inversioneshernandezrd.com/" target="_blank" rel="noopener" aria-label="Sitio web oficial">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.6 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.6-3.8-9S9.5 5.5 12 3z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/people/Inversiones-Hern%C3%A1ndez/61592151383152/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M14 9.2h-1.3c-.8 0-1.2.5-1.2 1.3V12H14l-.4 2.3h-2.1V21h-2.3v-6.7H7.4V12h1.8v-1.9c0-1.9 1.2-3.4 3-3.4H14z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/inversioneshernandezrd/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@inversioneshernandezrd" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15 3v10.7a3.7 3.7 0 11-3-3.63V7.2a6.8 6.8 0 106.8 6.8V10a8 8 0 004.2 1.2V8a5 5 0 01-5-5z"/></svg>
+        </a>
+      </div>
+    </div>
+    <span class="footer-note">Tu información se usa únicamente para actualizar tu expediente en Inversiones Hernández.</span>
+  </div>
+</footer>
+
+<!-- ============ OVERLAYS ============ -->
+
+<!-- Loader -->
+<div class="overlay" id="loaderOverlay" hidden>
+  <div class="overlay-card">
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="loaderText">Enviando tu información…</p>
+    <div class="loader-bar"><div class="loader-bar-fill" id="loaderBarFill"></div></div>
+  </div>
+</div>
+
+<!-- Éxito -->
+<div class="overlay" id="successOverlay" hidden>
+  <div class="overlay-card">
+    <div class="success-check" aria-hidden="true">
+      <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M14 27l8 8 16-16"/></svg>
+    </div>
+    <h3>¡Información recibida!</h3>
+    <p>Tus datos y documentos fueron enviados correctamente. Nuestro equipo los revisará en breve.</p>
+  </div>
+</div>
+
+<!-- Imagen de ejemplo en tamaño completo -->
+<div class="overlay" id="imageModal" hidden>
+  <div class="overlay-card image-modal-card">
+    <button type="button" class="modal-close" id="closeImageModal" aria-label="Cerrar">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <img class="example-photo-lg" src="assets/fotos-requeridas.jpg" alt="Ejemplo de las 3 fotografías requeridas: foto de perfil sosteniendo el documento, documento de identidad frontal y documento de identidad reverso">
+  </div>
+</div>
+
+<!-- Toast de error genérico -->
+<div class="toast" id="toast" role="status" aria-live="assertive" hidden></div>
+
+<script src="script.js"></script>
+</body>
+</html>

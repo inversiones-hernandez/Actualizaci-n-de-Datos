@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Solicitud de Préstamo — Inversiones Hernández</title>
+<meta name="description" content="Solicita tu préstamo de forma segura y rápida con Inversiones Hernández RD.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://portal.inversioneshernandezrd.com/prestamos.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Inversiones Hernández">
+<meta property="og:title" content="Solicitud de Préstamo — Inversiones Hernández">
+<meta property="og:description" content="Solicita tu préstamo de forma segura y rápida.">
+<meta property="og:url" content="https://portal.inversioneshernandezrd.com/prestamos.html">
+<meta property="og:locale" content="es_DO">
+<meta property="og:image" content="https://portal.inversioneshernandezrd.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0066ff">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#formulario">Saltar al formulario</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <img class="brand-mark" src="logo-horizontal.png" alt="Inversiones Hernández — Impulsando tu crecimiento financiero">
+    </a>
+    <div class="trust-badges" aria-label="Indicadores de seguridad">
+      <span class="badge-pill">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
+        Solicitud de Préstamo
+      </span>
+      <span class="badge-pill">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        Protección SSL
+      </span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Préstamos · Solicitud digital</div>
+    <h1>Cuéntanos qué necesitas</h1>
+    <p class="hero-sub">Responde estas preguntas y nuestro equipo evaluará tu solicitud lo antes posible.</p>
+    <button type="button" class="btn btn-primary btn-lg" id="startBtn">
+      Comenzar solicitud
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </button>
+    <div class="hero-trust">
+      <div class="trust-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/></svg>Conexión segura</div>
+      <div class="trust-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Toma pocos minutos</div>
+      <div class="trust-item"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Respuesta rápida</div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section" id="formulario">
+  <div class="wrap">
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <ol class="progress-steps" id="progressSteps">
+        <li class="progress-step active" data-step="1"><span class="dot">1</span><span class="label">Sobre ti</span></li>
+        <li class="progress-step" data-step="2"><span class="dot">2</span><span class="label">El préstamo</span></li>
+        <li class="progress-step" data-step="3"><span class="dot">3</span><span class="label">Confirmar</span></li>
+      </ol>
+    </div>
+
+    <form id="loanForm" class="glass-card form-card" novalidate autocomplete="on">
+
+      <!-- Campo trampa para bots: invisible para personas, si llega lleno se descarta el envío -->
+      <div class="honeypot-field" aria-hidden="true">
+        <label for="sitioWeb">No llenar este campo</label>
+        <input type="text" id="sitioWeb" name="sitioWeb" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- ===== PASO 1: SOBRE TI ===== -->
+      <fieldset class="step active" data-step="1">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Sobre ti
+        </legend>
+
+        <div class="field-grid">
+          <div class="field"><label for="nombres">¿Cuáles son tus nombres? *</label><input type="text" id="nombres" name="nombres" required autocomplete="given-name"><span class="field-error">Cuéntanos tus nombres.</span></div>
+          <div class="field"><label for="apellidos">¿Y tus apellidos? *</label><input type="text" id="apellidos" name="apellidos" required autocomplete="family-name"><span class="field-error">Cuéntanos tus apellidos.</span></div>
+          <div class="field"><label for="documento">¿Cuál es tu número de cédula? *</label><input type="text" id="documento" name="documento" required placeholder="000-0000000-0" inputmode="numeric"><span class="field-error">Escribe una cédula válida (11 dígitos).</span></div>
+          <div class="field"><label for="whatsapp">¿A qué número de WhatsApp te contactamos? *</label><input type="tel" id="whatsapp" name="whatsapp" required placeholder="809-000-0000" inputmode="numeric"><span class="field-error">Escribe un número dominicano válido (809/829/849).</span></div>
+          <div class="field"><label for="correo">¿Cuál es tu correo electrónico?</label><input type="email" id="correo" name="correo" placeholder="tucorreo@ejemplo.com"><span class="field-error">Escribe un correo válido.</span></div>
+          <div class="field"><label for="provincia">¿En qué provincia vives? *</label><input type="text" id="provincia" name="provincia" required><span class="field-error">Cuéntanos en qué provincia vives.</span></div>
+          <div class="field">
+            <label for="esCliente">¿Ya eres cliente de Inversiones Hernández? *</label>
+            <select id="esCliente" name="esCliente" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="Sí">Sí, ya soy cliente</option>
+              <option value="No">No, es mi primera vez</option>
+            </select>
+            <span class="field-error">Selecciona una opción.</span>
+          </div>
+          <div class="field"><label for="ingresoMensual">¿Cuál es tu ingreso mensual aproximado? *</label><input type="number" id="ingresoMensual" name="ingresoMensual" required min="0" placeholder="RD$"><span class="field-error">Cuéntanos tu ingreso mensual aproximado.</span></div>
+        </div>
+      </fieldset>
+
+      <!-- ===== PASO 2: EL PRÉSTAMO ===== -->
+      <fieldset class="step" data-step="2">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
+          El préstamo
+        </legend>
+
+        <div class="field-grid">
+          <div class="field"><label for="montoSolicitado">¿Cuánto dinero necesitas? *</label><input type="number" id="montoSolicitado" name="montoSolicitado" required min="1" placeholder="RD$"><span class="field-error">Cuéntanos cuánto necesitas.</span></div>
+          <div class="field"><label for="plazoMeses">¿En cuántos meses te gustaría pagarlo? *</label><input type="number" id="plazoMeses" name="plazoMeses" required min="1" placeholder="Ej. 12"><span class="field-error">Indica el plazo en meses.</span></div>
+          <div class="field"><label for="cuotaPago">¿Cuánto podrías pagar mensualmente? *</label><input type="number" id="cuotaPago" name="cuotaPago" required min="1" placeholder="RD$"><span class="field-error">Cuéntanos cuánto podrías pagar al mes.</span></div>
+          <div class="field field-full"><label for="motivo">¿Para qué vas a usar el préstamo? *</label><textarea id="motivo" name="motivo" required rows="3" placeholder="Ej. capital para mi negocio, remodelación, emergencia médica..."></textarea><span class="field-error">Cuéntanos para qué es el préstamo.</span></div>
+          <div class="field">
+            <label for="garantia">¿Tienes alguna garantía o colateral que ofrecer?</label>
+            <select id="garantia" name="garantia">
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="Vehículo">Vehículo</option>
+              <option value="Propiedad">Propiedad</option>
+              <option value="Ninguna">Ninguna por el momento</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ===== PASO 3: CONFIRMACIÓN ===== -->
+      <fieldset class="step" data-step="3">
+        <legend class="step-title">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+          Confirmación
+        </legend>
+
+        <div class="field-grid">
+          <div class="field"><label for="referenciaNombre">Antes de terminar, ¿nos das el nombre de una referencia personal?</label><input type="text" id="referenciaNombre" name="referenciaNombre" placeholder="Nombre completo"></div>
+          <div class="field"><label for="referenciaTelefono">¿Y su número de teléfono?</label><input type="tel" id="referenciaTelefono" name="referenciaTelefono" placeholder="809-000-0000" inputmode="numeric"><span class="field-error">Escribe un número dominicano válido (809/829/849).</span></div>
+        </div>
+
+        <div class="summary-box" id="summaryBox" aria-live="polite"></div>
+
+        <label class="consent-row">
+          <input type="checkbox" id="consentimiento" name="consentimiento" required>
+          <span>Confirmo que toda la información suministrada es correcta y autorizo a Inversiones Hernández a utilizarla para evaluar mi solicitud de préstamo.</span>
+        </label>
+        <span class="field-error" id="consentError">Debes confirmar y autorizar el uso de tus datos.</span>
+
+        <button type="submit" class="btn btn-primary btn-huge" id="submitBtn">
+          Enviar solicitud
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        </button>
+      </fieldset>
+
+      <div class="form-nav">
+        <button type="button" class="btn btn-ghost" id="prevBtn" disabled>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          Atrás
+        </button>
+        <span class="step-indicator"><span id="stepCurrent">1</span> / 3</span>
+        <button type="button" class="btn btn-primary" id="nextBtn">
+          <span id="nextBtnLabel">Siguiente</span>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-top">
+      <span>© 2026 Inversiones Hernández.</span>
+      <div class="footer-socials">
+        <a href="https://inversioneshernandezrd.com/" target="_blank" rel="noopener" aria-label="Sitio web oficial">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.6 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.6-3.8-9S9.5 5.5 12 3z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/people/Inversiones-Hern%C3%A1ndez/61592151383152/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M14 9.2h-1.3c-.8 0-1.2.5-1.2 1.3V12H14l-.4 2.3h-2.1V21h-2.3v-6.7H7.4V12h1.8v-1.9c0-1.9 1.2-3.4 3-3.4H14z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/inversioneshernandezrd/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@inversioneshernandezrd" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15 3v10.7a3.7 3.7 0 11-3-3.63V7.2a6.8 6.8 0 106.8 6.8V10a8 8 0 004.2 1.2V8a5 5 0 01-5-5z"/></svg>
+        </a>
+      </div>
+    </div>
+    <span class="footer-note">Tu información se usa únicamente para evaluar tu solicitud de préstamo.</span>
+  </div>
+</footer>
+
+<div class="overlay" id="loaderOverlay" hidden>
+  <div class="overlay-card">
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="loaderText">Enviando tu solicitud…</p>
+    <div class="loader-bar"><div class="loader-bar-fill" id="loaderBarFill"></div></div>
+  </div>
+</div>
+
+<div class="overlay" id="successOverlay" hidden>
+  <div class="overlay-card">
+    <div class="success-check" aria-hidden="true">
+      <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M14 27l8 8 16-16"/></svg>
+    </div>
+    <h3>¡Solicitud recibida!</h3>
+    <p>Tu solicitud de préstamo fue enviada correctamente. Nuestro equipo la evaluará y te contactará pronto.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="assertive" hidden></div>
+
+<script src="prestamos-script.js"></script>
+</body>
+</html>
