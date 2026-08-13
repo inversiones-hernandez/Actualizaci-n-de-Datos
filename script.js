@@ -28,6 +28,9 @@
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB por foto
 
   let currentStep = 1;
+  let mapa = null;
+  let marcador = null;
+  const UBICACION_INICIAL = [18.4861, -69.9312]; // Santo Domingo, RD (centro por defecto)
 
   /* ===== 2. UTILIDADES ===== */
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -129,6 +132,14 @@
       if (!ok) allValid = false;
     }
 
+    // Mapa de ubicación (paso 2)
+    if (stepNumber === 2) {
+      const tieneCoordenadas = !!($('#latitud').value && $('#longitud').value);
+      $('#mapaError').style.display = tieneCoordenadas ? 'none' : 'block';
+      $('#mapaUbicacion').classList.toggle('invalid', !tieneCoordenadas);
+      if (!tieneCoordenadas) allValid = false;
+    }
+
     if (!allValid) showToast('Revisa los campos marcados antes de continuar.', true);
     return allValid;
   }
@@ -184,8 +195,58 @@
     $('#nextBtnLabel').textContent = step === TOTAL_STEPS - 1 ? 'Paso final' : 'Siguiente';
 
     if (step === TOTAL_STEPS) renderSummary();
+    if (step === 2) setTimeout(initMapa, 50); // dar tiempo a que el paso sea visible antes de dibujar el mapa
 
     $('#formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ===== MAPA DE UBICACIÓN ===== */
+  function initMapa() {
+    if (!mapa) {
+      mapa = L.map('mapaUbicacion', { zoomControl: true }).setView(UBICACION_INICIAL, 8);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+      }).addTo(mapa);
+
+      marcador = L.marker(UBICACION_INICIAL, { draggable: true }).addTo(mapa);
+
+      marcador.on('dragend', actualizarCoordenadas);
+      mapa.on('click', (e) => {
+        marcador.setLatLng(e.latlng);
+        actualizarCoordenadas();
+      });
+
+      // Si el navegador da permiso, centra el mapa cerca del cliente para
+      // que le sea más fácil ubicar su punto exacto (el marcador lo sigue
+      // colocando él mismo — esto solo ayuda a encontrar la zona).
+      if (navigator.geolocation && !$('#latitud').value) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const coords = [pos.coords.latitude, pos.coords.longitude];
+            mapa.setView(coords, 15);
+          },
+          () => {}, // si el cliente no da permiso, se queda con la vista general de RD
+          { timeout: 5000 }
+        );
+      }
+    }
+
+    setTimeout(() => mapa.invalidateSize(), 60); // corrige el render si el mapa estaba oculto
+  }
+
+  function actualizarCoordenadas() {
+    const pos = marcador.getLatLng();
+    $('#latitud').value = pos.lat.toFixed(6);
+    $('#longitud').value = pos.lng.toFixed(6);
+
+    $('#mapaError').style.display = 'none';
+    $('#mapaUbicacion').classList.remove('invalid');
+
+    const preview = $('#mapCoordsPreview');
+    preview.textContent = `📍 Ubicación seleccionada: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
+    preview.classList.add('has-coords');
   }
 
   function nextStep() {
@@ -225,7 +286,9 @@
   function handleSubmit(e) {
     e.preventDefault();
     if (!validateStep(5)) return;
+    if ($('#submitBtn').disabled) return; // evita doble envío por doble clic
 
+    $('#submitBtn').disabled = true;
     showLoader();
     submitToGoogleSheets();
   }
@@ -256,6 +319,7 @@
         clearInterval(progressTimer);
         console.error('Error al enviar el formulario:', error);
         hideLoader();
+        $('#submitBtn').disabled = false; // reactivar para que pueda reintentar
         showToast('No se pudo enviar tu información. Verifica tu conexión e intenta de nuevo.', true);
       });
   }
@@ -324,6 +388,7 @@
     });
 
     clearStorage();
+    $('#submitBtn').disabled = false; // reactivar para una posible próxima solicitud
     goToStep(1);
   }
 
@@ -398,3 +463,4 @@
 
   document.addEventListener('DOMContentLoaded', init);
 })();
+
