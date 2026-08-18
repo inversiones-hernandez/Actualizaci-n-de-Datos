@@ -450,36 +450,85 @@ html, body{ overflow-x:hidden; }
 img, svg{ max-width:100%; }
 
 /* ==========================================================================
-   PÁGINA PRINCIPAL — TARJETAS DE OPCIONES
+   PÁGINA PRINCIPAL — PORTAL TIPO APP
    ========================================================================== */
-.options-section{ padding:56px 0 80px; }
+.options-section{ padding:42px 0 72px; }
+.options-heading{ max-width:900px; margin:0 auto 22px; text-align:left; }
+.section-kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:11.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--azul-principal);
+}
+.section-kicker::before{ content:""; width:20px; height:2px; border-radius:2px; background:var(--azul-electrico); }
+.options-heading h2{ margin-top:6px; font-family:var(--display); font-size:clamp(22px,3vw,30px); color:var(--texto); }
+.options-heading p{ margin-top:4px; color:var(--gris-texto); font-size:14px; }
 .options-grid{
-  display:grid; grid-template-columns:1fr 1fr; gap:22px;
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px;
   max-width:900px; margin:0 auto;
 }
-@media (max-width:720px){ .options-grid{ grid-template-columns:1fr; } }
-
 .option-card{
-  display:flex; flex-direction:column; align-items:flex-start; gap:10px;
-  background:var(--blanco); border:1.5px solid var(--borde); border-radius:20px;
-  padding:32px 28px; text-decoration:none; color:var(--texto);
-  box-shadow:0 12px 30px -18px rgba(15,23,42,.18);
-  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  min-width:0; min-height:190px;
+  display:flex; flex-direction:column; align-items:flex-start; gap:9px;
+  background:var(--blanco); border:1.5px solid var(--borde); border-radius:22px;
+  padding:24px 24px 20px; text-decoration:none; color:var(--texto);
+  box-shadow:0 14px 34px -20px rgba(15,23,42,.24);
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  -webkit-tap-highlight-color:transparent;
 }
 .option-card:hover{
-  transform:translateY(-4px); border-color:var(--azul-principal);
-  box-shadow:0 18px 36px -16px rgba(0,102,255,.28);
+  transform:translateY(-4px); border-color:rgba(0,102,255,.45);
+  box-shadow:0 22px 44px -20px rgba(0,102,255,.30);
 }
+.option-card:active{ transform:translateY(-1px) scale(.995); }
 .option-icon{
-  width:52px; height:52px; border-radius:14px; background:var(--gris-bg);
-  display:flex; align-items:center; justify-content:center; margin-bottom:6px;
+  width:54px; height:54px; border-radius:16px;
+  background:linear-gradient(145deg,#eef5ff,#e5efff);
+  display:flex; align-items:center; justify-content:center; margin-bottom:5px;
+  border:1px solid rgba(0,102,255,.08);
 }
-.option-icon .icon{ width:26px; height:26px; color:var(--azul-principal); }
-.option-card h2{ font-family:var(--display); font-size:20px; color:var(--texto); }
-.option-card p{ font-size:14.5px; color:var(--gris-texto); line-height:1.5; }
+.option-icon .icon{ width:27px; height:27px; color:var(--azul-principal); }
+.option-card h2{ font-family:var(--display); font-size:18px; line-height:1.2; color:var(--texto); }
+.option-card p{ font-size:13.5px; color:var(--gris-texto); line-height:1.45; max-width:42ch; }
 .option-cta{
-  margin-top:auto; padding-top:10px; display:inline-flex; align-items:center; gap:6px;
-  font-weight:700; font-size:14px; color:var(--azul-principal);
+  margin-top:auto; padding-top:8px; display:inline-flex; align-items:center; gap:6px;
+  font-weight:800; font-size:13px; color:var(--azul-principal);
 }
-.option-cta .icon{ width:18px; height:18px; transition:transform .2s ease; }
+.option-cta .icon{ width:17px; height:17px; transition:transform .2s ease; }
 .option-card:hover .option-cta .icon{ transform:translateX(4px); }
+
+/* Tablet */
+@media (max-width:900px){
+  .options-section{ padding-top:34px; }
+  .options-grid{ gap:14px; }
+}
+
+/* Móvil: acciones horizontales tipo app */
+@media (max-width:640px){
+  .options-section{ padding:28px 0 48px; }
+  .options-heading{ margin-bottom:16px; }
+  .options-heading h2{ font-size:23px; }
+  .options-heading p{ font-size:13px; }
+  .options-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  .option-card{
+    min-height:0; height:168px; border-radius:18px;
+    padding:16px 13px 13px; gap:7px;
+    box-shadow:0 10px 24px -18px rgba(15,23,42,.30);
+  }
+  .option-icon{ width:44px; height:44px; border-radius:13px; margin-bottom:3px; }
+  .option-icon .icon{ width:23px; height:23px; }
+  .option-card h2{ font-size:14px; line-height:1.25; }
+  .option-card p{ font-size:11.5px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .option-cta{ font-size:11.5px; padding-top:4px; }
+  .option-cta .icon{ width:15px; height:15px; }
+}
+
+/* Móviles pequeños: conservar dos acciones sin romper el layout */
+@media (max-width:380px){
+  .options-grid{ gap:8px; }
+  .option-card{ height:158px; padding:14px 11px 11px; }
+  .option-icon{ width:40px; height:40px; border-radius:12px; }
+  .option-icon .icon{ width:21px; height:21px; }
+  .option-card h2{ font-size:13px; }
+  .option-card p{ font-size:10.5px; }
+  .option-cta{ font-size:10.5px; }
+}
