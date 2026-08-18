@@ -33,9 +33,16 @@
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="index.html">
+    <a class="brand" href="index.html" aria-label="Inversiones Hernández — Inicio">
       <img class="brand-mark" src="logo-horizontal.png" alt="Inversiones Hernández RD — Impulsando tu crecimiento financiero">
     </a>
+
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      <a href="index.html" class="nav-link active">Inicio</a>
+      <a href="actualizar.html" class="nav-link">Registro de Cliente</a>
+      <a href="prestamos.html" class="nav-link">Solicitar Préstamo</a>
+    </nav>
+
     <div class="trust-badges" aria-label="Indicadores de seguridad">
       <span class="badge-pill">
         <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
@@ -46,6 +53,43 @@
         Datos Encriptados
       </span>
     </div>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav class="mobile-menu-inner" aria-label="Menú móvil">
+      <a href="index.html" class="mobile-menu-link active">
+        <span class="mobile-menu-icon">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+        </span>
+        <span><strong>Inicio</strong><small>Portal de clientes</small></span>
+      </a>
+      <a href="actualizar.html" class="mobile-menu-link">
+        <span class="mobile-menu-icon">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </span>
+        <span><strong>Registro de Cliente</strong><small>Registra o actualiza tu información</small></span>
+      </a>
+      <a href="prestamos.html" class="mobile-menu-link">
+        <span class="mobile-menu-icon">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
+        </span>
+        <span><strong>Solicitar Préstamo</strong><small>Inicia una nueva solicitud</small></span>
+      </a>
+      <div class="mobile-menu-divider"></div>
+      <a href="https://inversioneshernandezrd.com/" target="_blank" rel="noopener" class="mobile-menu-link compact">
+        <span class="mobile-menu-icon small-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.6 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.6-3.8-9S9.5 5.5 12 3z"/></svg></span>
+        <span><strong>Sitio web oficial</strong><small>Conoce más sobre nosotros</small></span>
+      </a>
+      <div class="mobile-social-row" aria-label="Redes sociales">
+        <a href="https://www.facebook.com/people/Inversiones-Hern%C3%A1ndez/61592151383152/" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+        <a href="https://www.instagram.com/inversioneshernandezrd/" target="_blank" rel="noopener" aria-label="Instagram">◎</a>
+        <a href="https://www.tiktok.com/@inversioneshernandezrd" target="_blank" rel="noopener" aria-label="TikTok">♪</a>
+      </div>
+    </nav>
   </div>
 </header>
 
@@ -71,8 +115,8 @@
         <div class="option-icon">
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </div>
-        <h2>Actualizar mis datos</h2>
-        <p>Mantén tu información personal, de contacto y laboral al día en tu expediente.</p>
+        <h2>Registro de Cliente</h2>
+        <p>Actualiza tu información personal, de contacto y laboral.</p>
         <span class="option-cta">
           Comenzar
           <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
@@ -83,8 +127,8 @@
         <div class="option-icon">
           <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
         </div>
-        <h2>Solicitar un préstamo</h2>
-        <p>Cuéntanos qué necesitas y nuestro equipo evaluará tu solicitud lo antes posible.</p>
+        <h2>Solicitar Préstamo</h2>
+        <p>Solicita financiamiento de forma rápida y segura.</p>
         <span class="option-cta">
           Comenzar
           <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
@@ -118,6 +162,37 @@
     <span class="footer-note">Tu información se usa únicamente para tu expediente en Inversiones Hernández RD.</span>
   </div>
 </footer>
+
+<script>
+(() => {
+  const button = document.getElementById('mobileMenuBtn');
+  const menu = document.getElementById('mobileMenu');
+  if (!button || !menu) return;
+
+  const closeMenu = () => {
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Abrir menú');
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('menu-open');
+  };
+
+  button.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    button.setAttribute('aria-label', open ? 'Abrir menú' : 'Cerrar menú');
+    menu.classList.toggle('open', !open);
+    menu.setAttribute('aria-hidden', String(open));
+    document.body.classList.toggle('menu-open', !open);
+  });
+
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+})();
+</script>
 
 </body>
 </html>
