@@ -1668,16 +1668,4 @@
   } else {
     iniciarPortal();
   }
-
-   // Evitar conflictos con las celdas combinadas.
-sheet.setFrozenColumns(0);
-sheet.setFrozenRows(0);
-
-try {
-  sheet.setFrozenRows(headerRow);
-} catch (error) {
-  console.warn(
-    'Se continúa sin inmovilizar filas porque hay celdas combinadas.'
-  );
-}
 })();
