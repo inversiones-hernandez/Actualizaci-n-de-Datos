@@ -1663,7 +1663,7 @@
   ) {
     document.addEventListener(
       "DOMContentLoaded",
-      iniciarPortal
+      iniciarPortal            
     );
   } else {
     iniciarPortal();
