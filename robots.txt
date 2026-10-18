@@ -1,0 +1,4 @@
+# Esta página recopila datos personales de clientes existentes:
+# se excluye intencionalmente de la indexación (ver meta robots=noindex en index.html).
+User-agent: *
+Disallow: /
